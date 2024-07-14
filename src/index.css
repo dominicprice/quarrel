@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.chevron-across {
+    background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+Cjxzdmcgd2lkdGg9IjE3IiBoZWlnaHQ9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogPGcgY2xhc3M9ImxheWVyIj4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPHBvbHlnb24gaWQ9InN2Z18xIiBwb2ludHM9IjcuMjkzIDQuNzA3IDE0LjU4NiAxMiA3LjI5MyAxOS4yOTMgOC43MDcgMjAuNzA3IDE3LjQxNCAxMiA4LjcwNyAzLjI5MyA3LjI5MyA0LjcwNyIvPgogPC9nPgo8L3N2Zz4=") right center no-repeat;
+    background-color: rgb(228, 224, 127, 0.5);
+    background-blend-mode: lighten;
+}
+
+.chevron-down {
+    background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+Cjxzdmcgd2lkdGg9IjI0IiBoZWlnaHQ9IjE3IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogPGcgY2xhc3M9ImxheWVyIj4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPHBvbHlnb24gaWQ9InN2Z18xIiBwb2ludHM9IjEyIDE3LjQxNCAzLjI5MyA4LjcwNyA0LjcwNyA3LjI5MyAxMiAxNC41ODYgMTkuMjkzIDcuMjkzIDIwLjcwNyA4LjcwNyAxMiAxNy40MTQiLz4KIDwvZz4KPC9zdmc+") center bottom no-repeat;
+    background-color: rgb(228, 224, 127, 0.5);
+    background-blend-mode: lighten;
+}
