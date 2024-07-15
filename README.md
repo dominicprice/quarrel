@@ -1,30 +1,42 @@
-# React + TypeScript + Vite
+# Quarrel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web tool for creating crosswords.
 
-Currently, two official plugins are available:
+I developed this mainly to help with creating cryptic crosswords. The main
+features I was looking to implement were:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Ensuring that the grid symmetry was maintained
+2. A helper to find words matching the checking letters of other clues
+3. Ability to export into a variety of formats
 
-## Expanding the ESLint configuration
+I am(/should be) hosting this at
+[quarrel.conkers29.co.uk](https://quarrel.conkers29.co.uk) where you play around
+with this.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Developing
 
-- Configure the top-level `parserOptions` property like this:
+Install all the npm dependencies with
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```sh
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+The dev server is run with
+
+```sh
+npm run dev
+```
+
+## Building
+
+The app is built into a `build` directory with
+
+```sh
+npm run build
+```
+
+You can then dockerise the app with
+
+```sh
+docker build .
+```

@@ -1,18 +1,19 @@
 import { ChangeEvent, useRef, useState } from "react";
 import slugify from "slugify";
 import { useLocalStorage } from "usehooks-ts";
-import Clues from "./components/clues";
-import Grid from "./components/grid";
-import HelpView from "./components/helpview";
-import MenuBar, { MenuItem } from "./components/menubar";
-import NewDialog from "./components/newdialog";
-import PrintView from "./components/printview";
-import { stringToBlob } from "./lib/blob";
-import Cells from "./lib/cells";
-import Modal from "./lib/components/modal";
-import Dir from "./lib/dir";
-import { PlaintextExportChars, asciiChars, unicodeChars } from "./lib/export";
-import Position from "./lib/position";
+import Clues from "#/components/clues";
+import Grid from "#/components/grid";
+import HelpView from "#/components/helpview";
+import MenuBar from "#/components/menubar";
+import MenuItem from "#/components/menubar/menuitem";
+import NewDialog from "#/components/newdialog";
+import PrintView from "#/components/printview";
+import { stringToBlob } from "#/lib/blob";
+import Cells from "#/lib/cells";
+import Modal from "#/lib/components/modal";
+import Dir from "#/lib/dir";
+import { PlaintextExportChars, asciiChars, unicodeChars } from "#/lib/export";
+import Position from "#/lib/position";
 
 enum ModalType {
     None = 0,

@@ -1,50 +1,6 @@
 import classNames from "classnames";
 import { memo } from "react";
 
-interface ModalHeaderCellProps {
-    letter: string;
-    hasSpace?: boolean;
-}
-
-function toCellProps(word: string): ModalHeaderCellProps[] {
-    const res = [];
-    for (let i = 0; i < word.length; ++i) {
-        if (word[i] !== " ")
-            res.push({ letter: word[i], hasSpace: word[i + 1] === " " });
-    }
-    return res;
-}
-
-const ModalHeaderCell = memo(({ letter, hasSpace }: ModalHeaderCellProps) => {
-    return (
-        <div
-            className={classNames(
-                "w-6",
-                "h-6",
-                { "bg-white": letter !== "" },
-                { "bg-neutral-800": letter == "" },
-                "text-neutral-800",
-                "flex",
-                "justify-center",
-                "items-center",
-                { "border-r": letter !== "" && !hasSpace },
-                { "border-r-2": hasSpace },
-                "border-b",
-                "border-t",
-                "border-black",
-                "uppercase",
-                "font-bold",
-                "text-sm",
-                { "group-hover/label:bg-amber-100": letter !== "" },
-                "transition",
-                { "cursor-pointer": letter !== "" },
-            )}
-        >
-            {letter}
-        </div>
-    );
-});
-
 interface ModalHeaderProps {
     title: string;
     onClose: () => void;
@@ -63,24 +19,10 @@ const ModalHeader = ({ title, onClose }: ModalHeaderProps) => {
                 "border-b-1",
             )}
         >
-            {toCellProps(title).map((props, i) => (
-                <ModalHeaderCell key={i} {...props} />
-            ))}
+            <div className="text-neutral-300 font-bold">{title}</div>
             <div className="ml-auto order-2">
                 <button
-                    className={classNames(
-                        "w-6",
-                        "h-6",
-                        "bg-red-600",
-                        "text-white",
-                        "flex",
-                        "justify-center",
-                        "items-center",
-                        "border",
-                        "border-black",
-                        "font-bold",
-                        "text-sm",
-                    )}
+                    className="text-white font-bold text-lg"
                     onClick={onClose}
                 >
                     ×

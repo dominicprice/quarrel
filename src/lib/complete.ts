@@ -8,7 +8,7 @@ fetch("/dictionary.json")
     .catch((err) => console.log(err));
 
 function completeWord(word: string): string[] {
-    return completeWordInner(word.toLowerCase(), trie);
+    return completeWordInner(word.toUpperCase(), trie);
 }
 
 function completeWordInner(word: string, trie: Trie): string[] {

@@ -19,7 +19,7 @@ class FileReader:
 
     def __iter__(self):
         for line in self.f:
-            yield line.decode().strip().lower()
+            yield line.decode().strip().upper()
 
     def __exit__(self, *_):
         self.f.close()

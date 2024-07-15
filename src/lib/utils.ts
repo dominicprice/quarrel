@@ -13,4 +13,10 @@ function intersperse<T, S>(ts: T[], s: S) {
     return res;
 }
 
-export { intersperse, normaliseClue };
+function clamp(x: number, min: number, max: number): number {
+    if (x < min) return min;
+    else if (x > max) return max;
+    return x;
+}
+
+export { intersperse, normaliseClue, clamp };
