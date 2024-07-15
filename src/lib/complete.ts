@@ -2,7 +2,13 @@ type Trie = { [key: string]: Trie };
 
 let trie: Trie = {};
 
-fetch("/dictionary.json")
+fetch("/dictionary.json.gzip")
+    .then((resp) => resp.blob())
+    .then((blob) => {
+        const ds = new DecompressionStream("gzip");
+        const stream = blob.stream().pipeThrough(ds);
+        return new Response(stream);
+    })
     .then((resp) => resp.json())
     .then((json) => (trie = json))
     .catch((err) => console.log(err));

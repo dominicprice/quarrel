@@ -21,7 +21,13 @@ Install all the npm dependencies with
 npm install
 ```
 
-The dev server is run with
+You may need to generate or update the completion dictionary by running
+
+```sh
+python3 scripts/gen_dictionary.py
+```
+
+The dev server can then be run with
 
 ```sh
 npm run dev
@@ -29,7 +35,7 @@ npm run dev
 
 ## Building
 
-The app is built into a `build` directory with
+The app is built into a `dist` directory with
 
 ```sh
 npm run build

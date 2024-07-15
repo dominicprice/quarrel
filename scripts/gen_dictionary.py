@@ -1,5 +1,7 @@
-# /usr/bin/env python3
+#! /usr/bin/env python3
+
 import argparse
+import gzip
 import json
 from urllib.parse import urlparse
 from urllib.request import urlopen
@@ -40,7 +42,7 @@ def main(url: str, path: str, indent: int | None):
         for word in f:
             add_word(word, trie)
 
-    with open(path, "w") as f:
+    with gzip.open(path, "wt") as f:
         json.dump(trie, f, indent=indent)
 
 
@@ -60,7 +62,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "path",
         nargs="?",
-        default="public/dictionary.json",
+        default="public/dictionary.json.gzip",
         help="Output file path",
     )
     args = parser.parse_args()
