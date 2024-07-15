@@ -7,7 +7,6 @@ import HelpView from "#/components/helpview";
 import MenuBar from "#/components/menubar";
 import MenuItem from "#/components/menubar/menuitem";
 import NewDialog from "#/components/newdialog";
-import PrintView from "#/components/printview";
 import { stringToBlob } from "#/lib/blob";
 import Cells from "#/lib/cells";
 import Modal from "#/lib/components/modal";
@@ -17,9 +16,8 @@ import Position from "#/lib/position";
 
 enum ModalType {
     None = 0,
-    Print = 1,
-    Help = 2,
-    New = 3,
+    Help = 1,
+    New = 2,
 }
 
 const App = () => {
@@ -166,18 +164,6 @@ const App = () => {
     return (
         <>
             <Modal
-                title="Print Preview"
-                onClose={() => setCurrentModal(ModalType.None)}
-                show={currentModal === ModalType.Print}
-            >
-                <PrintView
-                    key={ModalType.Print}
-                    cells={cells}
-                    title={title}
-                    description={description}
-                />
-            </Modal>
-            <Modal
                 title="Help"
                 onClose={() => setCurrentModal(ModalType.None)}
                 show={currentModal === ModalType.Help}
@@ -218,10 +204,6 @@ const App = () => {
                         <MenuItem
                             label="Unicode"
                             onClick={() => onExportPlaintext(unicodeChars)}
-                        />
-                        <MenuItem
-                            label="Print"
-                            onClick={() => setCurrentModal(ModalType.Print)}
                         />
                     </MenuItem>
                     <MenuItem

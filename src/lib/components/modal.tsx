@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import { memo } from "react";
 
 interface ModalHeaderProps {
     title: string;
