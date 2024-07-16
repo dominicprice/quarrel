@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Cells from "#/lib/cells";
 import Dir from "#/lib/dir";
 import Position from "#/lib/position";
@@ -23,16 +23,10 @@ const Grid = ({
     onCellChanged,
     onCellSplit,
 }: GridProps) => {
-    const ref = useRef(null as null | HTMLDivElement);
-
     const [moveDir, setMoveDir] = useState(Dir.Across);
     const [activeCell, setActiveCell] = useState(
         disabled ? null : ([0, 0] as Position),
     );
-
-    useEffect(() => {
-        if (ref.current !== null) ref.current.focus();
-    }, [ref]);
 
     const move = (delta: number, dir: Dir | null = null) => {
         if (activeCell == null) return;
@@ -130,10 +124,6 @@ const Grid = ({
     const onCellClicked = (row: number, col: number) => {
         if (activeCell == null) return;
 
-        if (ref.current !== null) {
-            ref.current.focus();
-        }
-
         if (row === activeCell[0] && col === activeCell[1]) {
             setMoveDir(moveDir === Dir.Across ? Dir.Down : Dir.Across);
         } else {
@@ -143,7 +133,6 @@ const Grid = ({
 
     return (
         <div
-            ref={ref}
             tabIndex={0}
             onKeyDown={onKeyDown}
             className="flex flex-col bg-white border-black border-r border-b"

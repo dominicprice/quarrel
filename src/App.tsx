@@ -257,7 +257,7 @@ const App = () => {
                                 onCellChanged={onCellChanged}
                             />
                         </div>
-                        <div className="flex flex-row justify-center items-center">
+                        <div className="flex m-2 flex-row justify-center items-center">
                             <Clues
                                 cells={cells}
                                 onAnswerChanged={onAnswerChanged}

@@ -53,9 +53,15 @@ const GridCell = ({
             >
                 {cell.clueNum()}
             </div>
-            <div style={{ fontSize: letterSize }} className="font-bold">
-                {cell.value}
-            </div>
+            <input
+                value={cell.value}
+                style={{
+                    fontSize: letterSize,
+                    width: cellDim,
+                    height: cellDim,
+                }}
+                className="font-bold bg-transparent block cursor-pointer text-center caret-transparent outline-none"
+            />
         </div>
     );
 };

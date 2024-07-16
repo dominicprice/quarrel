@@ -60,7 +60,7 @@ const NewDialog = ({ onNewCells, onCancel }: NewDialogProps) => {
     return (
         <div className="flex flex-col h-full">
             <div className="flex-1 flex flex-col">
-                <div className="flex flex-row justify-between">
+                <div className="flex flex-col gap-8 md:gap-0 md:flex-row justify-between">
                     <div className="p-2 gap-1 flex flex-col">
                         <div>Mode</div>
                         <div>

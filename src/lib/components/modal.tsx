@@ -56,8 +56,10 @@ const Modal = ({ title, children, show, onClose }: ModalProps) => {
                 className={classNames(
                     "flex",
                     "flex-col",
-                    "w-[50vw]",
-                    "h-[50vh]",
+                    "w-[90vw]",
+                    "h-[90vh]",
+                    "md:w-[50vw]",
+                    "md:h-[50vh]",
                     "bg-white",
                     "shadow",
                 )}
