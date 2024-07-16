@@ -13,11 +13,29 @@ fetch("/dictionary.json.gzip")
     .then((json) => (trie = json))
     .catch((err) => console.log(err));
 
-function completeWord(word: string): string[] {
-    return completeWordInner(word.toUpperCase(), trie);
+function isWord(word: string): boolean {
+    const words = word.toUpperCase().split(/\s\-/);
+    for (const w of words) {
+        if (!isWordInner(w, trie)) return false;
+    }
+    return true;
 }
 
-function completeWordInner(word: string, trie: Trie): string[] {
+function isWordInner(word: string, trie: Trie): boolean {
+    for (const c of word) {
+        trie = trie[c];
+        if (trie === undefined) return false;
+    }
+    return trie[""] !== undefined;
+}
+
+function completeWord(word: string, limit: number): string[] {
+    return completeWordInner(word.toUpperCase(), trie, limit);
+}
+
+function completeWordInner(word: string, trie: Trie, limit: number): string[] {
+    if (limit == 0) return [];
+
     if (word.length === 0) {
         const endOfWord = trie[""] !== undefined;
         return endOfWord ? [""] : [];
@@ -28,20 +46,23 @@ function completeWordInner(word: string, trie: Trie): string[] {
     const rest = word.substring(1);
     if (letter === "?") {
         for (const [subLetter, subTrie] of Object.entries(trie)) {
-            const subCompletions = completeWordInner(rest, subTrie);
+            const subCompletions = completeWordInner(rest, subTrie, limit);
             for (const completion of subCompletions)
                 completions.push(subLetter + completion);
+            limit -= subCompletions.length;
+            if (limit <= 0) break;
         }
     } else {
         const subTrie = trie[letter];
         if (subTrie !== undefined) {
-            const subCompletions = completeWordInner(rest, subTrie);
+            const subCompletions = completeWordInner(rest, subTrie, limit);
             for (const completion of subCompletions)
                 completions.push(letter + completion);
+            limit -= subCompletions.length;
         }
     }
     return completions;
 }
 
 export default completeWord;
-export { completeWordInner };
+export { completeWordInner, isWord, isWordInner };

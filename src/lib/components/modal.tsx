@@ -13,7 +13,6 @@ const ModalHeader = ({ title, onClose }: ModalHeaderProps) => {
                 "content-between",
                 "h-10",
                 "p-2",
-                "rounded-t",
                 "bg-neutral-800",
                 "border-b-1",
             )}
@@ -21,7 +20,7 @@ const ModalHeader = ({ title, onClose }: ModalHeaderProps) => {
             <div className="text-neutral-300 font-bold">{title}</div>
             <div className="ml-auto order-2">
                 <button
-                    className="text-white font-bold text-lg"
+                    className="text-white font-bold text-xl leading-3"
                     onClick={onClose}
                 >
                     ×
@@ -45,7 +44,6 @@ const Modal = ({ title, children, show, onClose }: ModalProps) => {
                 "z-50",
                 "justify-center",
                 "items-center",
-                "shadow",
                 "w-[100vw]",
                 "h-[100vh]",
                 "fixed",
@@ -61,13 +59,11 @@ const Modal = ({ title, children, show, onClose }: ModalProps) => {
                     "w-[50vw]",
                     "h-[50vh]",
                     "bg-white",
-                    "rounded",
+                    "shadow",
                 )}
             >
                 <ModalHeader title={title} onClose={onClose} />
-                <div className={classNames("overflow-y-scroll")}>
-                    {children}
-                </div>
+                <div className="p-2 overflow-y-scroll flex-1">{children}</div>
             </div>
         </div>
     );

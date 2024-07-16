@@ -18,10 +18,14 @@ const MenuItem = memo(({ label, onClick, children }: MenuItemProps) => {
                 "relative",
                 "select-none",
                 "group/item",
-                "px-2",
+                "px-4",
+                "py-2",
                 "cursor-pointer",
                 "hover:bg-neutral-700",
                 "transition",
+                "group-hover/submenu:w-full",
+                "group-hover/submenu:justify-start",
+                "group/submenu",
             )}
         >
             <div className="select-none flex flex-row">{label}</div>
@@ -32,13 +36,14 @@ const MenuItem = memo(({ label, onClick, children }: MenuItemProps) => {
                         "border-black",
                         "bg-neutral-800",
                         "absolute",
-                        "top-6",
+                        "top-10",
+                        "w-32",
                         "left-0",
-                        "w-64",
                         "flex-col",
                         "items-start",
                         "hidden",
                         "group-hover/item:flex",
+                        "shadow",
                     )}
                 >
                     {children}

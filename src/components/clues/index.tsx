@@ -18,9 +18,9 @@ const Clues = ({ cells, onClueChanged, onAnswerChanged }: CluesProps) => {
         .filter(([c, _]) => c.downClue !== null);
 
     return (
-        <div className="flex flex-row w-full">
-            <div className="w-1/2 border-r">
-                <h3>Across</h3>
+        <div className="flex flex-col md:flex-row w-full justify-center">
+            <div className="md:border-r">
+                <h3 className="font-bold">Across</h3>
                 <ClueList
                     cells={acrossClueCells}
                     dir={Dir.Across}
@@ -29,8 +29,8 @@ const Clues = ({ cells, onClueChanged, onAnswerChanged }: CluesProps) => {
                 />
             </div>
 
-            <div className="w-1/2 pl-1">
-                <h3>Down</h3>
+            <div className="pl-1">
+                <h3 className="font-bold">Down</h3>
                 <ClueList
                     cells={downClueCells}
                     dir={Dir.Down}

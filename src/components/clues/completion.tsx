@@ -13,7 +13,10 @@ const Completion = ({ word, onSelect }: CompletionProps) => {
                 "px-8",
                 "w-full",
                 "block",
-                "hover:bg-neutral-100",
+                "hover:bg-amber-50",
+                "border-b",
+                "border-neutral-50",
+                "text-xs",
             )}
             onClick={() => onSelect(word)}
         >

@@ -13,14 +13,14 @@ const ClueEntry = ({
     onAnswerChanged,
 }: ClueEntryProps) => {
     return (
-        <div key={clue.num} className="p-2 flex gap-2">
+        <div key={clue.num} className="p-2 flex gap-2 items-center">
             <span className="w-8">{clue.num}. </span>
-            <input
+            <textarea
                 value={clue.clue}
                 onInput={(e) => onClueChanged(e.currentTarget.value)}
                 placeholder={clue.answer}
-                className="border-b flex-1"
-            />
+                className="w-64 border resize-none p-1"
+            ></textarea>
             <Suggester pattern={clue.answer} onSelect={onAnswerChanged} />
             <span>
                 (

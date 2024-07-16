@@ -7,14 +7,22 @@ interface GridRowProps {
     onCellClicked: (col: number) => void;
     dir: Dir;
     activeCol?: number;
+    scale: number;
 }
 
-const GridRow = ({ cells, onCellClicked, activeCol, dir }: GridRowProps) => {
+const GridRow = ({
+    cells,
+    scale,
+    onCellClicked,
+    activeCol,
+    dir,
+}: GridRowProps) => {
     return (
         <div className="flex flex-row">
             {cells.map((cell, col) => (
                 <GridCell
                     key={col}
+                    scale={scale}
                     cell={cell}
                     onCellClicked={() => onCellClicked(col)}
                     isActive={col === activeCol}

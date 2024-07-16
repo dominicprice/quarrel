@@ -6,16 +6,28 @@ type GridCellProps = {
     onCellClicked: () => void;
     isActive: boolean;
     cell: Cell;
+    scale: number;
     dir: Dir;
 };
 
-const GridCell = ({ onCellClicked, isActive, cell, dir }: GridCellProps) => {
+const GridCell = ({
+    onCellClicked,
+    scale,
+    isActive,
+    cell,
+    dir,
+}: GridCellProps) => {
+    const cellDim = `${Math.floor(40 * scale)}px`;
+    const numSize = `${Math.floor(12 * scale)}px`;
+    const letterSize = `${Math.floor(24 * scale)}px`;
     return (
         <div
             onClick={onCellClicked}
+            style={{
+                width: cellDim,
+                height: cellDim,
+            }}
             className={classNames(
-                "w-10",
-                "h-10",
                 "border-black",
                 "border-l",
                 "border-t",
@@ -24,7 +36,6 @@ const GridCell = ({ onCellClicked, isActive, cell, dir }: GridCellProps) => {
                 "m-0",
                 "flex",
                 "justify-center",
-                "items-end",
                 "relative",
                 "select-none",
                 {
@@ -36,10 +47,15 @@ const GridCell = ({ onCellClicked, isActive, cell, dir }: GridCellProps) => {
                 },
             )}
         >
-            <div className="absolute text-xs top-0 left-0">
+            <div
+                style={{ fontSize: numSize }}
+                className="absolute top-0 left-0"
+            >
                 {cell.clueNum()}
             </div>
-            <div className="font-bold text-xl">{cell.value}</div>
+            <div style={{ fontSize: letterSize }} className="font-bold">
+                {cell.value}
+            </div>
         </div>
     );
 };

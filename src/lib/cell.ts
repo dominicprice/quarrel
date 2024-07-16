@@ -7,7 +7,7 @@ class Cell {
     splitLeft: boolean;
     splitAbove: boolean;
 
-    constructor(value: string = "") {
+    constructor(value = "") {
         this.value = value;
         this.acrossClue = null;
         this.downClue = null;
@@ -19,16 +19,18 @@ class Cell {
         return this.value === "" || this.value === "?";
     };
 
+    isBlank = () => {
+        return this.value === "";
+    };
+
     clueNum = () => {
-        if (this.acrossClue !== null)
-            return this.acrossClue.num;
-        else if (this.downClue !== null)
-            return this.downClue.num;
+        if (this.acrossClue !== null) return this.acrossClue.num;
+        else if (this.downClue !== null) return this.downClue.num;
         return null;
     };
 
     static fromJSON = (json: any) => {
-        let cell = new Cell(json.value);
+        const cell = new Cell(json.value);
         if (json.acrossClue !== null)
             cell.acrossClue = Clue.fromJSON(json.acrossClue);
         if (json.downClue !== null)
@@ -40,11 +42,10 @@ class Cell {
     };
 
     clone = () => {
-        let other = new Cell(this.value);
+        const other = new Cell(this.value);
         if (this.acrossClue !== null)
             other.acrossClue = this.acrossClue.clone();
-        if (this.downClue !== null)
-            other.downClue = this.downClue.clone();
+        if (this.downClue !== null) other.downClue = this.downClue.clone();
         other.splitLeft = this.splitLeft;
         other.splitAbove = this.splitAbove;
         return other;

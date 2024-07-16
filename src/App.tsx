@@ -35,6 +35,7 @@ const App = () => {
         deserializer: (j: string) => j,
     });
     const [currentModal, setCurrentModal] = useState(ModalType.None);
+    const [zoom, setZoom] = useState(1);
 
     const onNew = () => {
         setCurrentModal(ModalType.New);
@@ -46,8 +47,20 @@ const App = () => {
         updateDescription("");
     };
 
+    const onZoomIn = () => {
+        setZoom(zoom + 0.1);
+    };
+
+    const onZoomOut = () => {
+        setZoom(zoom - 0.1);
+    };
+
+    const onZoomReset = () => {
+        setZoom(1);
+    };
+
     const onExportJSON = () => {
-        const filename = slugify(title + ".json");
+        const filename = slugify((title || "crossword") + ".json");
         stringToBlob(JSON.stringify(cells), filename, "application/json");
     };
 
@@ -87,7 +100,7 @@ const App = () => {
         }
         grid.push(chars.bl + chars.b.repeat(cells.size()) + chars.br);
 
-        const filename = slugify(title + ".txt");
+        const filename = slugify((title || "crossword") + ".txt");
         stringToBlob(
             grid.concat(acrossClues, [""], downClues).join("\n"),
             filename,
@@ -189,7 +202,7 @@ const App = () => {
                 onChange={(e) => importJSON(e.target.files)}
                 className={"hidden"}
             />
-            <div>
+            <div className="h-full flex flex-col">
                 <MenuBar>
                     <MenuItem label="New" onClick={onNew} />
                     <MenuItem label="Import">
@@ -206,12 +219,17 @@ const App = () => {
                             onClick={() => onExportPlaintext(unicodeChars)}
                         />
                     </MenuItem>
+                    <MenuItem label="View">
+                        <MenuItem label="Zoom in" onClick={onZoomIn} />
+                        <MenuItem label="Zoom out" onClick={onZoomOut} />
+                        <MenuItem label="Reset zoom" onClick={onZoomReset} />
+                    </MenuItem>
                     <MenuItem
                         label="Help"
                         onClick={() => setCurrentModal(ModalType.Help)}
                     />
                 </MenuBar>
-                <div className="w-full flex flex-col">
+                <div className="h-full flex flex-col">
                     <div className="flex flex-col gap-4 p-4 items-center">
                         <input
                             placeholder="Crossword Title"
@@ -219,7 +237,7 @@ const App = () => {
                             onInput={(e: ChangeEvent<HTMLInputElement>) =>
                                 updateTitle(e.target.value)
                             }
-                            className="border-b text-2xl text-center"
+                            className="w-full md:w-[50vw] border-b text-2xl text-center"
                         />
                         <textarea
                             value={description}
@@ -227,18 +245,19 @@ const App = () => {
                                 updateDescription(e.target.value)
                             }
                             placeholder="Crossword Description"
-                            className="w-[50vw] border"
+                            className="w-full md:w-[50vw] border p-2"
                         ></textarea>
                     </div>
-                    <div className="flex flex-row">
-                        <div className="flex basis-1/2 flex-col items-center content-center margin-12">
+                    <div className="flex flex-col xl:flex-row justify-evenly gap-4">
+                        <div className="flex flex-row justify-center items-center">
                             <Grid
                                 cells={cells}
+                                scale={zoom}
                                 onCellSplit={onCellSplit}
                                 onCellChanged={onCellChanged}
                             />
                         </div>
-                        <div className="basis-1/2">
+                        <div className="flex flex-row justify-center items-center">
                             <Clues
                                 cells={cells}
                                 onAnswerChanged={onAnswerChanged}

@@ -17,8 +17,8 @@ const MenuBar = ({ children }: MenuBarProps) => {
             )}
         >
             {children}
-            <div className="order-2 ml-auto">
-                <img className="w-6 h-6" src="/logo.svg" />
+            <div className="order-2 ml-auto flex items-center pr-1">
+                <img className="w-8 h-8" src="/logo.svg" />
             </div>
         </div>
     );
