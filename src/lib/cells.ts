@@ -1,7 +1,6 @@
 import Cell from "./cell";
 import Clue from "./clue";
 import Dir from "./dir";
-import { PlaintextExportChars } from "./export";
 import Position from "./position";
 
 class Cells {
