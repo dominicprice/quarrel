@@ -55,6 +55,7 @@ const GridCell = ({
             </div>
             <input
                 value={cell.value}
+                onChange={() => {}}
                 style={{
                     fontSize: letterSize,
                     width: cellDim,

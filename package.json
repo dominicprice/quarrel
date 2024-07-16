@@ -14,6 +14,7 @@
         "classnames": "^2.5.1",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
+        "react-to-print": "^2.15.1",
         "slugify": "^1.6.6",
         "usehooks-ts": "^3.1.0"
     },

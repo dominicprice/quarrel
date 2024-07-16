@@ -13,18 +13,20 @@ import Modal from "#/lib/components/modal";
 import Dir from "#/lib/dir";
 import { PlaintextExportChars, asciiChars, unicodeChars } from "#/lib/export";
 import Position from "#/lib/position";
+import PrintPreview from "./components/printpreview";
 
 enum ModalType {
     None = 0,
     Help = 1,
     New = 2,
+    PrintPreview = 3,
 }
 
 const App = () => {
     const fileChooserInput = useRef(null as HTMLInputElement | null);
 
     const [cells, setCells] = useLocalStorage("cells", new Cells(15), {
-        deserializer: Cells.fromJSON,
+        deserializer: Cells.fromJsonString,
     });
     const [title, setTitle] = useLocalStorage("title", "", {
         serializer: (t: string) => t,
@@ -41,10 +43,10 @@ const App = () => {
         setCurrentModal(ModalType.New);
     };
 
-    const onReset = (cells: Cells) => {
+    const onReset = (cells: Cells, title?: string, description?: string) => {
         updateCells(() => cells);
-        updateTitle("");
-        updateDescription("");
+        updateTitle(title ?? "");
+        updateDescription(description ?? "");
     };
 
     const onZoomIn = () => {
@@ -61,7 +63,16 @@ const App = () => {
 
     const onExportJSON = () => {
         const filename = slugify((title || "crossword") + ".json");
-        stringToBlob(JSON.stringify(cells), filename, "application/json");
+        const exportedData = {
+            title: title,
+            description: description,
+            cells: cells,
+        };
+        stringToBlob(
+            JSON.stringify(exportedData),
+            filename,
+            "application/json",
+        );
     };
 
     const onExportPlaintext = (chars: PlaintextExportChars) => {
@@ -107,17 +118,21 @@ const App = () => {
         );
     };
 
-    const onImportJSON = () => {
+    const onImportJson = () => {
         if (fileChooserInput.current !== null) fileChooserInput.current.click();
     };
 
-    const importJSON = (files: FileList | null) => {
+    const importJson = (files: FileList | null) => {
         if (files === null || files.length === 0) return;
         const file = files.item(0);
         if (file === null) return;
-        file.text().then((json) => {
-            const cellsRaw = JSON.parse(json);
-            onReset(Cells.fromJSON(cellsRaw));
+        file.text().then((jsonString) => {
+            const importedData = JSON.parse(jsonString);
+            onReset(
+                importedData.cells,
+                importedData.title,
+                importedData.description,
+            );
         });
     };
 
@@ -196,17 +211,28 @@ const App = () => {
                     onCancel={() => setCurrentModal(ModalType.None)}
                 />
             </Modal>
+            <Modal
+                title="Print Preview"
+                onClose={() => setCurrentModal(ModalType.None)}
+                show={currentModal === ModalType.PrintPreview}
+            >
+                <PrintPreview
+                    title={title}
+                    description={description}
+                    cells={cells}
+                />
+            </Modal>
             <input
                 type="file"
                 ref={fileChooserInput}
-                onChange={(e) => importJSON(e.target.files)}
+                onChange={(e) => importJson(e.target.files)}
                 className={"hidden"}
             />
             <div className="h-full flex flex-col">
                 <MenuBar>
                     <MenuItem label="New" onClick={onNew} />
                     <MenuItem label="Import">
-                        <MenuItem label="JSON" onClick={onImportJSON} />
+                        <MenuItem label="JSON" onClick={onImportJson} />
                     </MenuItem>
                     <MenuItem label="Export">
                         <MenuItem label="JSON" onClick={onExportJSON} />
@@ -217,6 +243,12 @@ const App = () => {
                         <MenuItem
                             label="Unicode"
                             onClick={() => onExportPlaintext(unicodeChars)}
+                        />
+                        <MenuItem
+                            label="Print"
+                            onClick={() =>
+                                setCurrentModal(ModalType.PrintPreview)
+                            }
                         />
                     </MenuItem>
                     <MenuItem label="View">

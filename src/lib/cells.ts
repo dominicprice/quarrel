@@ -143,8 +143,12 @@ class Cells {
         return answer;
     };
 
-    static fromJSON = (rawJson: string) => {
-        const json = JSON.parse(rawJson);
+    static fromJsonString = (jsonString: string) => {
+        const json = JSON.parse(jsonString);
+        return Cells.fromJson(json);
+    };
+
+    static fromJson = (json: any) => {
         const gridSize = json.cells.length;
         const cells = new Cells(gridSize);
         for (let i = 0; i < gridSize; ++i) {
