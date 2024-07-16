@@ -20,7 +20,7 @@ const Clues = ({ cells, onClueChanged, onAnswerChanged }: CluesProps) => {
     return (
         <div className="flex flex-col md:flex-row w-full justify-center">
             <div className="md:border-r">
-                <h3 className="font-bold">Across</h3>
+                <h3 className="font-bold font-display">Across</h3>
                 <ClueList
                     cells={acrossClueCells}
                     dir={Dir.Across}
@@ -29,8 +29,8 @@ const Clues = ({ cells, onClueChanged, onAnswerChanged }: CluesProps) => {
                 />
             </div>
 
-            <div className="pl-1">
-                <h3 className="font-bold">Down</h3>
+            <div className="md:pl-3">
+                <h3 className="font-bold font-display">Down</h3>
                 <ClueList
                     cells={downClueCells}
                     dir={Dir.Down}

@@ -23,6 +23,7 @@ const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(
                     "z-10",
                     "h-48",
                     "overflow-y-scroll",
+                    "min-w-32",
                 )}
             >
                 {completions.length > 0 ? (
@@ -34,7 +35,7 @@ const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(
                         />
                     ))
                 ) : (
-                    <div className="italic py-1 px-2 text-neutral-600">
+                    <div className="italic py-1 px-2 text-neutral-600 text-xs">
                         No completions
                     </div>
                 )}

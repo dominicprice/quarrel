@@ -14,7 +14,7 @@ fetch("/dictionary.json.gzip")
     .catch((err) => console.log(err));
 
 function isWord(word: string): boolean {
-    const words = word.toUpperCase().split(/\s\-/);
+    const words = word.toUpperCase().split(" ");
     for (const w of words) {
         if (!isWordInner(w, trie)) return false;
     }

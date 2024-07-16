@@ -237,7 +237,7 @@ const App = () => {
                             onInput={(e: ChangeEvent<HTMLInputElement>) =>
                                 updateTitle(e.target.value)
                             }
-                            className="w-full md:w-[50vw] border-b text-2xl text-center"
+                            className="w-full md:w-[50vw] border-b text-2xl text-center font-display"
                         />
                         <textarea
                             value={description}
@@ -245,7 +245,7 @@ const App = () => {
                                 updateDescription(e.target.value)
                             }
                             placeholder="Crossword Description"
-                            className="w-full md:w-[50vw] border p-2"
+                            className="w-full md:w-[50vw] border p-2 font-display resize-none"
                         ></textarea>
                     </div>
                     <div className="flex flex-col xl:flex-row justify-evenly gap-4">

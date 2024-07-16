@@ -13,23 +13,23 @@ const ClueEntry = ({
     onAnswerChanged,
 }: ClueEntryProps) => {
     return (
-        <div key={clue.num} className="p-2 flex gap-2 items-center">
-            <span className="w-8">{clue.num}. </span>
+        <div key={clue.num} className="p-2 flex flex-row gap-2 items-center">
+            <div className="w-8 font-display">{clue.num}. </div>
             <textarea
                 value={clue.clue}
                 onInput={(e) => onClueChanged(e.currentTarget.value)}
                 placeholder={clue.answer}
-                className="w-64 border resize-none p-1"
+                className="w-64 border resize-none p-1 font-display"
             ></textarea>
-            <Suggester pattern={clue.answer} onSelect={onAnswerChanged} />
-            <span>
+            <div className="font-display">
                 (
                 {clue.answer
                     .split(" ")
                     .map((w) => w.length)
                     .join(",")}
                 )
-            </span>
+            </div>
+            <Suggester pattern={clue.answer} onSelect={onAnswerChanged} />
         </div>
     );
 };
