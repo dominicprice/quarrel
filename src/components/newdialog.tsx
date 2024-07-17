@@ -3,6 +3,9 @@ import Cells from "../lib/cells";
 import { templates } from "../lib/templates";
 import Grid from "./grid";
 
+const GRID_SIZE_MIN = 3;
+const GRID_SIZE_MAX = 29;
+
 enum Mode {
     FromSize = 0,
     FromTemplate = 1,
@@ -57,6 +60,17 @@ const NewDialog = ({ onNewCells, onCancel }: NewDialogProps) => {
         }
     };
 
+    const canSubmit = () => {
+        switch (createMode) {
+            case Mode.FromTemplate:
+                return templates[template] !== undefined;
+            case Mode.FromSize:
+                return gridSize >= GRID_SIZE_MIN && gridSize <= GRID_SIZE_MAX;
+            default:
+                return false;
+        }
+    };
+
     return (
         <div className="flex flex-col h-full">
             <div className="flex-1 flex flex-col">
@@ -86,8 +100,8 @@ const NewDialog = ({ onNewCells, onCancel }: NewDialogProps) => {
                                         onChange={(e) =>
                                             onGridSizeChanged(e.target.value)
                                         }
-                                        min={5}
-                                        max={20}
+                                        min={GRID_SIZE_MIN}
+                                        max={GRID_SIZE_MAX}
                                     />
                                 </div>
                             </>
@@ -130,8 +144,9 @@ const NewDialog = ({ onNewCells, onCancel }: NewDialogProps) => {
             </div>
             <div className="flex flex-row gap-2">
                 <button
+                    disabled={!canSubmit()}
                     onClick={() => onNewCells(generateGrid())}
-                    className="bg-green-600 text-white outline-none cursor-pointer py-1 px-2"
+                    className="disabled:bg-red-600 bg-green-600 text-white outline-none cursor-pointer py-1 px-2"
                 >
                     Create
                 </button>

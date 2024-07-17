@@ -26,6 +26,7 @@ const MenuItem = memo(({ label, onClick, children }: MenuItemProps) => {
                 "group-hover/submenu:w-full",
                 "group-hover/submenu:justify-start",
                 "group/submenu",
+                "z-30",
             )}
         >
             <div className="select-none flex flex-row">{label}</div>

@@ -14,6 +14,7 @@ import Dir from "#/lib/dir";
 import { PlaintextExportChars, asciiChars, unicodeChars } from "#/lib/export";
 import Position from "#/lib/position";
 import PrintPreview from "./components/printpreview";
+import { getDefaultScale } from "./lib/utils";
 
 enum ModalType {
     None = 0,
@@ -37,7 +38,7 @@ const App = () => {
         deserializer: (j: string) => j,
     });
     const [currentModal, setCurrentModal] = useState(ModalType.None);
-    const [zoom, setZoom] = useState(1);
+    const [zoom, setZoom] = useState(getDefaultScale(cells.size()));
 
     const onNew = () => {
         setCurrentModal(ModalType.New);
@@ -47,6 +48,7 @@ const App = () => {
         updateCells(() => cells);
         updateTitle(title ?? "");
         updateDescription(description ?? "");
+        setZoom(getDefaultScale(cells.size()));
     };
 
     const onZoomIn = () => {
@@ -58,7 +60,7 @@ const App = () => {
     };
 
     const onZoomReset = () => {
-        setZoom(1);
+        setZoom(getDefaultScale(cells.size()));
     };
 
     const onExportJSON = () => {
@@ -269,7 +271,7 @@ const App = () => {
                             onInput={(e: ChangeEvent<HTMLInputElement>) =>
                                 updateTitle(e.target.value)
                             }
-                            className="w-full md:w-[50vw] border-b text-2xl text-center font-display"
+                            className="w-full md:w-[50vw] border-b text-2xl text-center font-serif"
                         />
                         <textarea
                             value={description}
@@ -277,7 +279,7 @@ const App = () => {
                                 updateDescription(e.target.value)
                             }
                             placeholder="Crossword Description"
-                            className="w-full md:w-[50vw] border p-2 font-display resize-none"
+                            className="w-full md:w-[50vw] border p-2 font-serif resize-none"
                         ></textarea>
                     </div>
                     <div className="flex flex-col xl:flex-row justify-evenly gap-4">

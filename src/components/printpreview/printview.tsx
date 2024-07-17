@@ -10,6 +10,11 @@ interface PrintViewProps {
     margin: number;
     textSize: number;
     gridSize: number;
+
+    showHeader: boolean;
+    showDescription: boolean;
+    showAnswers: boolean;
+    showClues: boolean;
 }
 
 const PrintView = forwardRef<HTMLDivElement, PrintViewProps>(
@@ -21,6 +26,10 @@ const PrintView = forwardRef<HTMLDivElement, PrintViewProps>(
             margin,
             textSize,
             gridSize,
+            showHeader,
+            showDescription,
+            showAnswers,
+            showClues,
         }: PrintViewProps,
         ref,
     ) => {
@@ -29,29 +38,30 @@ const PrintView = forwardRef<HTMLDivElement, PrintViewProps>(
         const descriptionSize = `${textSize}px`;
         const clueSize = `${textSize}px`;
         const cellSize = `${gridSize}px`;
+        const letterSize = `${Math.floor(gridSize * 0.65)}px`;
         const numSize = `${Math.floor(gridSize / 3)}px`;
         const numMarginLeft = `${Math.ceil(gridSize / 20)}px`;
 
         return (
             <div style={{ margin: marginSize }} ref={ref}>
-                {title && (
+                {title && showHeader && (
                     <h1
                         style={{ fontSize: headerSize }}
-                        className="font-display text-center"
+                        className="font-serif text-center pb-4"
                     >
                         {title}
                     </h1>
                 )}
 
-                {description && (
+                {description && showDescription && (
                     <p
                         style={{ fontSize: descriptionSize }}
-                        className="font-display px-4 py-8"
+                        className="font-serif px-4 py-4"
                     >
                         {description}
                     </p>
                 )}
-                <div className="flex flex-row justify-center">
+                <div className="flex flex-row justify-center py-4">
                     <div className="flex flex-col border-b border-black">
                         {cells.cells.map((row, r) => (
                             <div
@@ -69,6 +79,8 @@ const PrintView = forwardRef<HTMLDivElement, PrintViewProps>(
                                             "border-t",
                                             "border-l",
                                             "border-black",
+                                            "flex",
+                                            "justify-center",
                                             "relative",
                                             {
                                                 "bg-black": cell.value === "",
@@ -81,9 +93,17 @@ const PrintView = forwardRef<HTMLDivElement, PrintViewProps>(
                                                     fontSize: numSize,
                                                     left: numMarginLeft,
                                                 }}
-                                                className="absolute top-0"
+                                                className="absolute top-0 font-serif"
                                             >
                                                 {cell.clueNum()}
+                                            </div>
+                                        )}
+                                        {showAnswers && (
+                                            <div
+                                                style={{ fontSize: letterSize }}
+                                                className="font-block"
+                                            >
+                                                {cell.value}
                                             </div>
                                         )}
                                     </div>
@@ -92,21 +112,40 @@ const PrintView = forwardRef<HTMLDivElement, PrintViewProps>(
                         ))}
                     </div>
                 </div>
-                <div
-                    className="flex flex-row font-display justify-center pt-8"
-                    style={{ fontSize: clueSize }}
-                >
-                    <div className="flex flex-col basis-1/2 items-end mr-6">
-                        <div className="flex flex-col">
-                            <h3 className="font-bold">Across</h3>
+                {showClues && (
+                    <div
+                        className="flex flex-row font-serif justify-center pt-4"
+                        style={{ fontSize: clueSize }}
+                    >
+                        <div className="flex flex-col basis-1/2 items-end mr-6">
+                            <div className="flex flex-col">
+                                <h3 className="font-bold">Across</h3>
+                                {cells
+                                    .allCells()
+                                    .filter(([c]) => c.acrossClue !== null)
+                                    .map(([c, _]) => (
+                                        <p key={c.clueNum()}>
+                                            {c.clueNum()}. {c.acrossClue!.clue}{" "}
+                                            (
+                                            {c
+                                                .acrossClue!.answer.split(" ")
+                                                .map((w) => w.length)
+                                                .join(",")}
+                                            )
+                                        </p>
+                                    ))}
+                            </div>
+                        </div>
+                        <div className="flex flex-col basis-1/2 ml-6">
+                            <h3 className="font-bold">Down</h3>
                             {cells
                                 .allCells()
-                                .filter(([c]) => c.acrossClue !== null)
+                                .filter(([c]) => c.downClue !== null)
                                 .map(([c, _]) => (
                                     <p key={c.clueNum()}>
-                                        {c.clueNum()}. {c.acrossClue!.clue} (
+                                        {c.clueNum()}. {c.downClue!.clue} (
                                         {c
-                                            .acrossClue!.answer.split(" ")
+                                            .downClue!.answer.split(" ")
                                             .map((w) => w.length)
                                             .join(",")}
                                         )
@@ -114,23 +153,7 @@ const PrintView = forwardRef<HTMLDivElement, PrintViewProps>(
                                 ))}
                         </div>
                     </div>
-                    <div className="flex flex-col basis-1/2 ml-6">
-                        <h3 className="font-bold">Down</h3>
-                        {cells
-                            .allCells()
-                            .filter(([c]) => c.downClue !== null)
-                            .map(([c, _]) => (
-                                <p key={c.clueNum()}>
-                                    {c.clueNum()}. {c.downClue!.clue} (
-                                    {c
-                                        .downClue!.answer.split(" ")
-                                        .map((w) => w.length)
-                                        .join(",")}
-                                    )
-                                </p>
-                            ))}
-                    </div>
-                </div>
+                )}
             </div>
         );
     },

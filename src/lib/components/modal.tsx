@@ -58,8 +58,8 @@ const Modal = ({ title, children, show, onClose }: ModalProps) => {
                     "flex-col",
                     "w-[90vw]",
                     "h-[90vh]",
-                    "md:w-[50vw]",
-                    "md:h-[50vh]",
+                    "md:w-[684px]",
+                    "md:h-[70vh]",
                     "bg-white",
                     "shadow",
                 )}

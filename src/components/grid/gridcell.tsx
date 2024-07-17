@@ -20,6 +20,7 @@ const GridCell = ({
     const cellDim = `${Math.floor(40 * scale)}px`;
     const numSize = `${Math.floor(12 * scale)}px`;
     const letterSize = `${Math.floor(24 * scale)}px`;
+
     return (
         <div
             onClick={onCellClicked}
@@ -61,7 +62,7 @@ const GridCell = ({
                     width: cellDim,
                     height: cellDim,
                 }}
-                className="font-bold bg-transparent block cursor-pointer text-center caret-transparent outline-none"
+                className="bg-transparent block cursor-pointer text-center caret-transparent outline-none font-block"
             />
         </div>
     );

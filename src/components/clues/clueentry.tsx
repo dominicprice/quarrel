@@ -14,14 +14,14 @@ const ClueEntry = ({
 }: ClueEntryProps) => {
     return (
         <div key={clue.num} className="p-2 flex flex-row gap-2 items-center">
-            <div className="w-8 font-display">{clue.num}. </div>
+            <div className="w-8 font-serif">{clue.num}. </div>
             <textarea
                 value={clue.clue}
                 onInput={(e) => onClueChanged(e.currentTarget.value)}
                 placeholder={clue.answer}
-                className="w-64 border resize-none p-1 font-display"
+                className="w-64 border resize-none p-1 font-serif"
             ></textarea>
-            <div className="font-display">
+            <div className="font-serif">
                 (
                 {clue.answer
                     .split(" ")

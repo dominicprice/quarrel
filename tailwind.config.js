@@ -4,7 +4,9 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                display: ["Merriweather"],
+                sans: ["ABeeZee", "sans-serif"],
+                serif: ["Merriweather", "serif"],
+                block: ["'Archivo Black'", "serif"],
             },
         },
     },
