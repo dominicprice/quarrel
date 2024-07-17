@@ -11,7 +11,12 @@ import { stringToBlob } from "#/lib/blob";
 import Cells from "#/lib/cells";
 import Modal from "#/lib/components/modal";
 import Dir from "#/lib/dir";
-import { PlaintextExportChars, asciiChars, unicodeChars } from "#/lib/export";
+import exportPuzzle, {
+    ExportFormat,
+    PlaintextExportChars,
+    asciiChars,
+    unicodeChars,
+} from "#/lib/export";
 import Position from "#/lib/position";
 import PrintPreview from "./components/printpreview";
 import { getDefaultScale } from "./lib/utils";
@@ -63,61 +68,15 @@ const App = () => {
         setZoom(getDefaultScale(cells.size()));
     };
 
-    const onExportJSON = () => {
-        const filename = slugify((title || "crossword") + ".json");
-        const exportedData = {
-            title: title,
-            description: description,
-            cells: cells,
-        };
-        stringToBlob(
-            JSON.stringify(exportedData),
-            filename,
-            "application/json",
+    const onExport = (format: ExportFormat) => {
+        const [data, ext, mime] = exportPuzzle(
+            format,
+            title,
+            description,
+            cells,
         );
-    };
-
-    const onExportPlaintext = (chars: PlaintextExportChars) => {
-        const grid = [title.toUpperCase(), "", description, ""];
-        const acrossClues = ["Across:"];
-        const downClues = ["Down:"];
-
-        grid.push(chars.ul + chars.u.repeat(cells.size()) + chars.ur);
-        for (let i = 0; i < cells.size(); ++i) {
-            const row = [];
-            for (let j = 0; j < cells.size(); ++j) {
-                const cell = cells.at([i, j]);
-                row.push(
-                    cell.value === "" ? chars.filledCell : chars.blankCell,
-                );
-                if (cell.acrossClue !== null)
-                    acrossClues.push(
-                        `${cell.acrossClue.num}. ${
-                            cell.acrossClue.clue
-                        } (${cell.acrossClue.answer
-                            .split(" ")
-                            .map((w) => w.length)
-                            .join(",")})`,
-                    );
-                if (cell.downClue !== null)
-                    downClues.push(
-                        `${cell.downClue.num}. ${
-                            cell.downClue.clue
-                        } (${cell.downClue.answer
-                            .split(" ")
-                            .map((w) => w.length)
-                            .join(",")})`,
-                    );
-            }
-            grid.push(chars.l + row.join("") + chars.r);
-        }
-        grid.push(chars.bl + chars.b.repeat(cells.size()) + chars.br);
-
-        const filename = slugify((title || "crossword") + ".txt");
-        stringToBlob(
-            grid.concat(acrossClues, [""], downClues).join("\n"),
-            filename,
-        );
+        const filename = slugify(title || "puzzle") + ext;
+        stringToBlob(data, filename, mime);
     };
 
     const onImportJson = () => {
@@ -237,26 +196,34 @@ const App = () => {
                         <MenuItem label="JSON" onClick={onImportJson} />
                     </MenuItem>
                     <MenuItem label="Export">
-                        <MenuItem label="JSON" onClick={onExportJSON} />
+                        <MenuItem
+                            label="JSON"
+                            onClick={() => onExport("json")}
+                        />
                         <MenuItem
                             label="Ascii"
-                            onClick={() => onExportPlaintext(asciiChars)}
+                            onClick={() => onExport("ascii")}
                         />
                         <MenuItem
                             label="Unicode"
-                            onClick={() => onExportPlaintext(unicodeChars)}
+                            onClick={() => onExport("unicode")}
                         />
                         <MenuItem
-                            label="Print"
-                            onClick={() =>
-                                setCurrentModal(ModalType.PrintPreview)
-                            }
+                            label="LaTeX"
+                            onClick={() => onExport("latex")}
                         />
+                        <MenuItem label="XML" onClick={() => onExport("xml")} />
                     </MenuItem>
                     <MenuItem label="View">
                         <MenuItem label="Zoom in" onClick={onZoomIn} />
                         <MenuItem label="Zoom out" onClick={onZoomOut} />
                         <MenuItem label="Reset zoom" onClick={onZoomReset} />
+                        <MenuItem
+                            label="Print Preview"
+                            onClick={() =>
+                                setCurrentModal(ModalType.PrintPreview)
+                            }
+                        />
                     </MenuItem>
                     <MenuItem
                         label="Help"

@@ -38,7 +38,7 @@ const MenuItem = memo(({ label, onClick, children }: MenuItemProps) => {
                         "bg-neutral-800",
                         "absolute",
                         "top-10",
-                        "w-32",
+                        "w-48",
                         "left-0",
                         "flex-col",
                         "items-start",
