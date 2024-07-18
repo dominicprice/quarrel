@@ -1,5 +1,4 @@
 import Clue from "#/lib/clue";
-import anagramWord from "#/lib/dictionary/anagram";
 import Anagrammer from "./anagrammer";
 import Suggester from "./suggester";
 
