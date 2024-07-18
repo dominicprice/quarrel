@@ -50,7 +50,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate completions dictionary")
     parser.add_argument(
         "--url",
-        default="https://github.com/dwyl/english-words/raw/master/words_alpha.txt",
+        default="https://gist.github.com/deostroll/7693b6f3d48b44a89ee5f57bf750bd32/raw/426f564cf73b4c87d2b2c46ccded8a5b98658ce1/dictionary.txt",
         help="URL or path of word list (one word per line)",
     )
     parser.add_argument(
