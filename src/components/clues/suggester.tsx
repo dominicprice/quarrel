@@ -1,8 +1,28 @@
 import classNames from "classnames";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
-import completeWord, { isWord } from "#/lib/complete";
+import { checkWord, completeWord } from "#/lib/dictionary";
 import CompletionList from "./completionlist";
+
+enum SuggestMode {
+    Unknown = 0,
+    Incomplete = 1,
+    Correct = 2,
+    Incorrect = 3,
+}
+
+function modeIndicator(mode: SuggestMode): [string, string] {
+    switch (mode) {
+        case SuggestMode.Unknown:
+            return ["", "hidden"];
+        case SuggestMode.Incomplete:
+            return ["/search.svg", "bg-blue-600"];
+        case SuggestMode.Correct:
+            return ["/tick.svg", "bg-green-600"];
+        case SuggestMode.Incorrect:
+            return ["/cross.svg", "bg-red-600"];
+    }
+}
 
 type SuggesterProps = {
     pattern: string;
@@ -11,6 +31,31 @@ type SuggesterProps = {
 
 const Suggester = ({ pattern, onSelect }: SuggesterProps) => {
     const [show, setShow] = useState(false);
+    const [mode, setMode] = useState(SuggestMode.Unknown);
+    const [completions, setCompletions] = useState<string[] | null>(null);
+
+    useEffect(() => {
+        const hasMissingLetters = pattern.indexOf("?") >= 0;
+        if (hasMissingLetters) {
+            setMode(SuggestMode.Incomplete);
+            return;
+        }
+        checkWord(pattern)
+            .then((v) =>
+                setMode(v ? SuggestMode.Correct : SuggestMode.Incorrect),
+            )
+            .catch(() => setMode(SuggestMode.Unknown));
+    }, [pattern]);
+
+    useEffect(() => {
+        if (show) {
+            completeWord(pattern, 100)
+                .then((c) => setCompletions(c))
+                .catch(() => setCompletions(null));
+        } else {
+            setCompletions(null);
+        }
+    }, [show]);
 
     const ref = useRef(null);
     useOnClickOutside([ref], () => setShow(false));
@@ -20,21 +65,14 @@ const Suggester = ({ pattern, onSelect }: SuggesterProps) => {
         onSelect(word);
     };
 
-    const hasMissingLetters = pattern.indexOf("?") >= 0;
-    const isCorrect = hasMissingLetters ? false : isWord(pattern);
+    const [value, className] = modeIndicator(mode);
 
     return (
         <div className={classNames("relative", "inline-block")}>
             <button
-                disabled={!hasMissingLetters}
+                disabled={mode !== SuggestMode.Incomplete}
                 className={classNames(
-                    {
-                        "bg-blue-600 text-white": hasMissingLetters,
-                        "bg-green-600 text-white":
-                            !hasMissingLetters && isCorrect,
-                        "bg-red-600 text-white":
-                            !hasMissingLetters && !isCorrect,
-                    },
+                    className,
                     "transition",
                     "text-xs",
                     "rounded-full",
@@ -43,15 +81,20 @@ const Suggester = ({ pattern, onSelect }: SuggesterProps) => {
                     "black",
                     "text-md",
                     "font-bold",
+                    "flex",
+                    "justify-center",
+                    "content-center",
+                    "align-center",
+                    "items-center",
                 )}
                 onClick={() => setShow(!show)}
             >
-                {hasMissingLetters ? "?" : isCorrect ? "✓" : "x"}
+                <img src={value} className="invert w-3 h-3" />
             </button>
             {show && (
                 <CompletionList
                     ref={ref}
-                    completions={completeWord(pattern, 100)}
+                    completions={completions}
                     onSelect={onWordSuggestered}
                 />
             )}

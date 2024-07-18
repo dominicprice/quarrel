@@ -1,35 +1,7 @@
-type Trie = { [key: string]: Trie };
+import remoteTrie, { Trie } from "./trie";
 
-let trie: Trie = {};
-
-fetch("/dictionary.json.gzip")
-    .then((resp) => resp.blob())
-    .then((blob) => {
-        const ds = new DecompressionStream("gzip");
-        const stream = blob.stream().pipeThrough(ds);
-        return new Response(stream);
-    })
-    .then((resp) => resp.json())
-    .then((json) => (trie = json))
-    .catch((err) => console.log(err));
-
-function isWord(word: string): boolean {
-    const words = word.toUpperCase().split(" ");
-    for (const w of words) {
-        if (!isWordInner(w, trie)) return false;
-    }
-    return true;
-}
-
-function isWordInner(word: string, trie: Trie): boolean {
-    for (const c of word) {
-        trie = trie[c];
-        if (trie === undefined) return false;
-    }
-    return trie[""] !== undefined;
-}
-
-function completeWord(word: string, limit: number): string[] {
+async function completeWord(word: string, limit: number): Promise<string[]> {
+    const trie = await remoteTrie;
     return completeWordInner(word.toUpperCase(), trie, limit);
 }
 
@@ -64,5 +36,4 @@ function completeWordInner(word: string, trie: Trie, limit: number): string[] {
     return completions;
 }
 
-export default completeWord;
-export { completeWordInner, isWord, isWordInner };
+export { completeWord, completeWordInner };

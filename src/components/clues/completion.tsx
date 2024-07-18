@@ -2,7 +2,7 @@ import classNames from "classnames";
 
 interface CompletionProps {
     word: string;
-    onSelect: (completion: string) => void;
+    onSelect?: (completion: string) => void;
 }
 
 const Completion = ({ word, onSelect }: CompletionProps) => {
@@ -18,7 +18,7 @@ const Completion = ({ word, onSelect }: CompletionProps) => {
                 "border-neutral-50",
                 "text-xs",
             )}
-            onClick={() => onSelect(word)}
+            onClick={onSelect && (() => onSelect(word))}
         >
             {word}
         </button>

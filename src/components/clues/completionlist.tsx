@@ -3,8 +3,8 @@ import { forwardRef } from "react";
 import Completion from "./completion";
 
 interface CompletionListProps {
-    completions: string[];
-    onSelect: (completion: string) => void;
+    completions: string[] | null;
+    onSelect?: (completion: string) => void;
 }
 
 const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(
@@ -26,7 +26,11 @@ const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(
                     "min-w-32",
                 )}
             >
-                {completions.length > 0 ? (
+                {completions === null ? (
+                    <div className="italic py-1 px-2 text-neutral-600 text-xs">
+                        Loading...
+                    </div>
+                ) : completions.length > 0 ? (
                     completions.map((word) => (
                         <Completion
                             key={word}

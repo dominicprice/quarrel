@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
-import { completeWordInner, isWordInner } from "./complete";
+import { checkWordInner } from "./check";
+import { completeWordInner } from "./complete";
 
 const testTrie = {
     C: {
@@ -32,8 +33,8 @@ test("complete word", () => {
 });
 
 test("is word", () => {
-    expect(isWordInner("CAB", testTrie)).toBeTruthy();
-    expect(isWordInner("DARE", testTrie)).toBeTruthy();
-    expect(isWordInner("CA", testTrie)).toBeFalsy();
-    expect(isWordInner("ASDF", testTrie)).toBeFalsy();
+    expect(checkWordInner("CAB", testTrie)).toBeTruthy();
+    expect(checkWordInner("DARE", testTrie)).toBeTruthy();
+    expect(checkWordInner("CA", testTrie)).toBeFalsy();
+    expect(checkWordInner("ASDF", testTrie)).toBeFalsy();
 });

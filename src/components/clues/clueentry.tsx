@@ -1,4 +1,6 @@
 import Clue from "#/lib/clue";
+import anagramWord from "#/lib/dictionary/anagram";
+import Anagrammer from "./anagrammer";
 import Suggester from "./suggester";
 
 interface ClueEntryProps {
@@ -21,8 +23,16 @@ const ClueEntry = ({
                 placeholder={clue.answer}
                 className="w-64 border resize-none p-1 font-serif"
             ></textarea>
-            <div className="font-serif">({clue.lengths()})</div>
-            <Suggester pattern={clue.answer} onSelect={onAnswerChanged} />
+            <div className="flex flex-col gap-1 justify-center items-center">
+                <div className="font-serif">({clue.lengths()})</div>
+                <div className="flex flex-row gap-1">
+                    <Suggester
+                        pattern={clue.answer}
+                        onSelect={onAnswerChanged}
+                    />
+                    <Anagrammer pattern={clue.answer} />
+                </div>
+            </div>
         </div>
     );
 };
