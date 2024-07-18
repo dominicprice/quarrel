@@ -1,18 +1,19 @@
 import Clue from "./clue";
+import Split from "./split";
 
 class Cell {
     value: string;
     acrossClue: Clue | null;
     downClue: Clue | null;
-    splitLeft: boolean;
-    splitAbove: boolean;
+    splitLeft: Split;
+    splitAbove: Split;
 
     constructor(value = "") {
         this.value = value;
         this.acrossClue = null;
         this.downClue = null;
-        this.splitLeft = false;
-        this.splitAbove = false;
+        this.splitLeft = Split.None;
+        this.splitAbove = Split.None;
     }
 
     isEmpty = () => {

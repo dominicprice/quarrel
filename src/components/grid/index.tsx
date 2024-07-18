@@ -2,6 +2,7 @@ import { useState } from "react";
 import Cells from "#/lib/cells";
 import Dir from "#/lib/dir";
 import Position from "#/lib/position";
+import Split from "#/lib/split";
 import { clamp } from "#/lib/utils";
 import GridRow from "./gridrow";
 
@@ -13,7 +14,7 @@ type GridProps = {
     scale?: number;
     disabled?: boolean;
     onCellChanged: (pos: Position, value: string) => void;
-    onCellSplit: (pos: Position, dir: Dir) => void;
+    onCellSplit: (pos: Position, dir: Dir, split: Split) => void;
 };
 
 const Grid = ({
@@ -50,13 +51,20 @@ const Grid = ({
     const onBackspace = () => {
         if (activeCell == null) return;
 
-        const [row, col] = activeCell;
-        const sPos: Position = [cells.size() - row - 1, cells.size() - col - 1];
         const v = cells.at(activeCell);
-        const w = cells.at(sPos);
-
-        if (v.isBlank() || (v.isEmpty() && !w.isEmpty())) move(-1);
-        else onCellChanged(activeCell, "");
+        if (!v.isEmpty()) {
+            onCellChanged(activeCell, "");
+            return;
+        }
+        if (moveDir == Dir.Across && v.splitLeft != Split.None) {
+            onCellSplit(activeCell, moveDir, Split.None);
+            return;
+        }
+        if (moveDir == Dir.Down && v.splitAbove != Split.None) {
+            onCellSplit(activeCell, moveDir, Split.None);
+            return;
+        }
+        move(-1);
     };
 
     const onLetter = (value: string) => {
@@ -96,7 +104,12 @@ const Grid = ({
     const onSpacebar = () => {
         if (activeCell == null) return;
 
-        onCellSplit(activeCell, moveDir);
+        onCellSplit(activeCell, moveDir, Split.Space);
+    };
+
+    const onHyphen = () => {
+        if (activeCell == null) return;
+        onCellSplit(activeCell, moveDir, Split.Hyphen);
     };
 
     const onKeyDown = (evt: React.KeyboardEvent<HTMLDivElement>) => {
@@ -111,6 +124,7 @@ const Grid = ({
             onArrowKey(evt.code);
         else if (evt.code === "Tab") onTab();
         else if (evt.code === "Space") onSpacebar();
+        else if (evt.key === "-") onHyphen();
         else if (allowedChars.indexOf(evt.key.toUpperCase()) >= 0)
             onLetter(evt.key.toUpperCase());
         else handled = false;

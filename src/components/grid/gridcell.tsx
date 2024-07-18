@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import Cell from "#/lib/cell";
 import Dir from "#/lib/dir";
+import Split from "#/lib/split";
+import { toPx } from "#/lib/utils";
 
 type GridCellProps = {
     onCellClicked: () => void;
@@ -17,9 +19,16 @@ const GridCell = ({
     cell,
     dir,
 }: GridCellProps) => {
-    const cellDim = `${Math.floor(40 * scale)}px`;
-    const numSize = `${Math.floor(12 * scale)}px`;
-    const letterSize = `${Math.floor(24 * scale)}px`;
+    const baseCellSize = 40;
+    const baseLetterSize = baseCellSize * 0.6;
+
+    const cellDim = toPx(baseCellSize, scale);
+    const numSize = toPx(baseLetterSize * 0.5, scale);
+    const letterSize = toPx(baseLetterSize, scale);
+    const hyphenSize = toPx(baseCellSize * 0.25, scale);
+    const hyphenOffsetY = toPx(baseCellSize * 0.5, scale);
+    const hyphenOffsetX = toPx(-baseCellSize * 0.125, scale);
+    const hyphenWidth = toPx(baseCellSize * 0.05, scale);
 
     return (
         <div
@@ -43,8 +52,8 @@ const GridCell = ({
                     "chevron-across": isActive && dir === Dir.Across,
                     "chevron-down": isActive && dir == Dir.Down,
                     "bg-neutral-800": cell.value === "",
-                    "border-l-4": cell.splitLeft,
-                    "border-t-4": cell.splitAbove,
+                    "border-l-4": cell.splitLeft == Split.Space,
+                    "border-t-4": cell.splitAbove == Split.Space,
                 },
             )}
         >
@@ -54,6 +63,30 @@ const GridCell = ({
             >
                 {cell.clueNum()}
             </div>
+            {cell.splitLeft == Split.Hyphen && (
+                <div
+                    style={{
+                        height: 0,
+                        width: hyphenSize,
+                        top: hyphenOffsetY,
+                        left: hyphenOffsetX,
+                        borderTopWidth: hyphenWidth,
+                    }}
+                    className="absolute border-black"
+                />
+            )}
+            {cell.splitAbove == Split.Hyphen && (
+                <div
+                    style={{
+                        height: hyphenSize,
+                        width: 0,
+                        left: hyphenOffsetY,
+                        top: hyphenOffsetX,
+                        borderLeftWidth: hyphenWidth,
+                    }}
+                    className="absolute border-black"
+                />
+            )}
             <input
                 value={cell.value}
                 onChange={() => {}}

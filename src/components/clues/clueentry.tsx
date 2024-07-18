@@ -21,14 +21,7 @@ const ClueEntry = ({
                 placeholder={clue.answer}
                 className="w-64 border resize-none p-1 font-serif"
             ></textarea>
-            <div className="font-serif">
-                (
-                {clue.answer
-                    .split(" ")
-                    .map((w) => w.length)
-                    .join(",")}
-                )
-            </div>
+            <div className="font-serif">({clue.lengths()})</div>
             <Suggester pattern={clue.answer} onSelect={onAnswerChanged} />
         </div>
     );

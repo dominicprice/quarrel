@@ -126,12 +126,7 @@ const PrintView = forwardRef<HTMLDivElement, PrintViewProps>(
                                     .map(([c, _]) => (
                                         <p key={c.clueNum()}>
                                             {c.clueNum()}. {c.acrossClue!.clue}{" "}
-                                            (
-                                            {c
-                                                .acrossClue!.answer.split(" ")
-                                                .map((w) => w.length)
-                                                .join(",")}
-                                            )
+                                            ({c.acrossClue!.lengths()})
                                         </p>
                                     ))}
                             </div>
@@ -144,11 +139,7 @@ const PrintView = forwardRef<HTMLDivElement, PrintViewProps>(
                                 .map(([c, _]) => (
                                     <p key={c.clueNum()}>
                                         {c.clueNum()}. {c.downClue!.clue} (
-                                        {c
-                                            .downClue!.answer.split(" ")
-                                            .map((w) => w.length)
-                                            .join(",")}
-                                        )
+                                        {c.downClue!.lengths()})
                                     </p>
                                 ))}
                         </div>

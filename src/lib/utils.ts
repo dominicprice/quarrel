@@ -24,4 +24,8 @@ function getDefaultScale(gridSize: number): number {
     return Math.min(maxScale, 1);
 }
 
-export { normaliseClue, clamp, getDefaultScale };
+function toPx(px: number, scale?: number): string {
+    return Math.ceil(scale ? px * scale : px).toString() + "px";
+}
+
+export { normaliseClue, clamp, getDefaultScale, toPx };

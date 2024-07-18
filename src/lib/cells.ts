@@ -2,6 +2,7 @@ import Cell from "./cell";
 import Clue from "./clue";
 import Dir from "./dir";
 import Position from "./position";
+import Split, { splitToString } from "./split";
 
 class Cells {
     cells: Cell[][];
@@ -60,13 +61,16 @@ class Cells {
         this.recalculateClues();
     };
 
-    toggleSplit = (pos: Position, dir: Dir) => {
+    toggleSplit = (pos: Position, dir: Dir, split: Split) => {
         const cell = this.at(pos);
         if (cell.value === "") this.setValue(pos, "?");
         if (dir === Dir.Across) {
-            if (pos[1] > 0) cell.splitLeft = !cell.splitLeft;
+            if (pos[1] > 0)
+                cell.splitLeft = cell.splitLeft === split ? Split.None : split;
         } else {
-            if (pos[0] > 0) cell.splitAbove = !cell.splitAbove;
+            if (pos[0] > 0)
+                cell.splitAbove =
+                    cell.splitAbove === split ? Split.None : split;
         }
 
         this.recalculateClues();
@@ -131,11 +135,9 @@ class Cells {
         while (row < this.size() && col < this.size()) {
             const cell = this.at([row, col]);
             if (cell.value === "") break;
-            if (
-                (cell.splitLeft && dir === Dir.Across) ||
-                (cell.splitAbove && dir === Dir.Down)
-            )
-                answer += " ";
+            answer += splitToString(
+                dir === Dir.Across ? cell.splitLeft : cell.splitAbove,
+            );
             answer += cell.value;
             if (dir === Dir.Across) col++;
             else row++;

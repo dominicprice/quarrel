@@ -11,14 +11,10 @@ import { stringToBlob } from "#/lib/blob";
 import Cells from "#/lib/cells";
 import Modal from "#/lib/components/modal";
 import Dir from "#/lib/dir";
-import exportPuzzle, {
-    ExportFormat,
-    PlaintextExportChars,
-    asciiChars,
-    unicodeChars,
-} from "#/lib/export";
+import exportPuzzle, { ExportFormat } from "#/lib/export";
 import Position from "#/lib/position";
 import PrintPreview from "./components/printpreview";
+import Split from "./lib/split";
 import { getDefaultScale } from "./lib/utils";
 
 enum ModalType {
@@ -134,9 +130,9 @@ const App = () => {
         setCells(newCells);
     };
 
-    const onCellSplit = (pos: Position, dir: Dir) => {
+    const onCellSplit = (pos: Position, dir: Dir, split: Split) => {
         const newCells = cells.clone();
-        newCells.toggleSplit(pos, dir);
+        newCells.toggleSplit(pos, dir, split);
         setCells(newCells);
     };
 
