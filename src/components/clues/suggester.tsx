@@ -33,6 +33,7 @@ const Suggester = ({ pattern, onSelect }: SuggesterProps) => {
     const [show, setShow] = useState(false);
     const [mode, setMode] = useState(SuggestMode.Unknown);
     const [completions, setCompletions] = useState<string[] | null>(null);
+    const [more, setMore] = useState(false);
 
     useEffect(() => {
         const hasMissingLetters = pattern.indexOf("?") >= 0;
@@ -50,7 +51,10 @@ const Suggester = ({ pattern, onSelect }: SuggesterProps) => {
     useEffect(() => {
         if (show) {
             completeWord(pattern, 100)
-                .then((c) => setCompletions(c))
+                .then(([c, m]) => {
+                    setCompletions(c);
+                    setMore(m);
+                })
                 .catch(() => setCompletions(null));
         } else {
             setCompletions(null);
@@ -95,6 +99,7 @@ const Suggester = ({ pattern, onSelect }: SuggesterProps) => {
                 <CompletionList
                     ref={ref}
                     completions={completions}
+                    more={more}
                     onSelect={onWordSuggestered}
                 />
             )}

@@ -4,11 +4,13 @@ import Completion from "./completion";
 
 interface CompletionListProps {
     completions: string[] | null;
+    more?: boolean;
     onSelect?: (completion: string) => void;
+    hoverClassName?: string;
 }
 
 const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(
-    ({ completions, onSelect }: CompletionListProps, ref) => {
+    ({ completions, onSelect, more }: CompletionListProps, ref) => {
         return (
             <div
                 ref={ref}
@@ -21,7 +23,7 @@ const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(
                     "shadow",
                     "border-1",
                     "z-10",
-                    "h-48",
+                    "max-h-48",
                     "overflow-y-scroll",
                     "min-w-32",
                 )}
@@ -43,6 +45,7 @@ const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(
                         No completions
                     </div>
                 )}
+                {completions !== null && more && <Completion word="..." />}
             </div>
         );
     },

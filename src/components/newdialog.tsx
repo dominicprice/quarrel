@@ -81,6 +81,7 @@ const NewDialog = ({ onNewCells, onCancel }: NewDialogProps) => {
                             <select
                                 onChange={(e) => onModeChanged(e.target.value)}
                                 className="w-48 p-2 bg-white border shadow"
+                                style={{ WebkitAppearance: "none" }}
                             >
                                 <option value="fromSize">Blank Grid</option>
                                 <option value="fromTemplate">
@@ -120,6 +121,7 @@ const NewDialog = ({ onNewCells, onCancel }: NewDialogProps) => {
                                             createMode !== Mode.FromTemplate
                                         }
                                         value={template}
+                                        style={{ WebkitAppearance: "none" }}
                                     >
                                         {Object.keys(templates).map((name) => (
                                             <option key={name} value={name}>

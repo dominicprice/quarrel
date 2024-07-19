@@ -3,25 +3,31 @@ import slugify from "slugify";
 import { useLocalStorage } from "usehooks-ts";
 import Clues from "#/components/clues";
 import Grid from "#/components/grid";
-import HelpView from "#/components/helpview";
 import MenuBar from "#/components/menubar";
-import MenuItem from "#/components/menubar/menuitem";
 import NewDialog from "#/components/newdialog";
 import { stringToBlob } from "#/lib/blob";
 import Cells from "#/lib/cells";
-import Modal from "#/lib/components/modal";
 import Dir from "#/lib/dir";
 import exportPuzzle, { ExportFormat } from "#/lib/export";
+import Modal from "#/lib/modal";
 import Position from "#/lib/position";
+import Export from "./components/export";
+import HelpAbout from "./components/help/about";
+import HelpGuide from "./components/help/guide";
 import PrintPreview from "./components/printpreview";
+import AnagramSolver from "./components/tools/anagramsolver";
+import importPuzzle, { ImportFormat } from "./lib/import";
 import Split from "./lib/split";
 import { getDefaultScale } from "./lib/utils";
 
 enum ModalType {
     None = 0,
-    Help = 1,
-    New = 2,
-    PrintPreview = 3,
+    HelpGuide = 1,
+    HelpAbout = 2,
+    New = 3,
+    PrintPreview = 4,
+    AnagramSolver = 5,
+    Export = 6,
 }
 
 const App = () => {
@@ -38,11 +44,11 @@ const App = () => {
         serializer: (d: string) => d,
         deserializer: (j: string) => j,
     });
-    const [currentModal, setCurrentModal] = useState(ModalType.None);
+    const [modal, setModal] = useState(ModalType.None);
     const [zoom, setZoom] = useState(getDefaultScale(cells.size()));
 
     const onNew = () => {
-        setCurrentModal(ModalType.New);
+        setModal(ModalType.New);
     };
 
     const onReset = (cells: Cells, title?: string, description?: string) => {
@@ -52,44 +58,32 @@ const App = () => {
         setZoom(getDefaultScale(cells.size()));
     };
 
-    const onZoomIn = () => {
-        setZoom(zoom + 0.1);
+    const onZoom = (delta: number | null) => {
+        if (delta === null) setZoom(getDefaultScale(cells.size()));
+        else setZoom(zoom + delta);
     };
 
-    const onZoomOut = () => {
-        setZoom(zoom - 0.1);
-    };
+    const onImport = (format: ImportFormat) => {
+        const { current: input } = fileChooserInput;
+        if (!input) return;
 
-    const onZoomReset = () => {
-        setZoom(getDefaultScale(cells.size()));
-    };
-
-    const onExport = (format: ExportFormat) => {
-        const [data, ext, mime] = exportPuzzle(
-            format,
-            title,
-            description,
-            cells,
-        );
-        const filename = slugify(title || "puzzle") + ext;
-        stringToBlob(data, filename, mime);
-    };
-
-    const onImportJson = () => {
+        input.setAttribute("dataFormat", format);
         if (fileChooserInput.current !== null) fileChooserInput.current.click();
     };
 
-    const importJson = (files: FileList | null) => {
+    const onImportSelected = (files: FileList | null) => {
+        const { current: input } = fileChooserInput;
+        if (!input) return;
+
+        const format = input.getAttribute("dataFormat") as ImportFormat | null;
+        if (format === null) return;
+
         if (files === null || files.length === 0) return;
         const file = files.item(0);
         if (file === null) return;
-        file.text().then((jsonString) => {
-            const importedData = JSON.parse(jsonString);
-            onReset(
-                importedData.cells,
-                importedData.title,
-                importedData.description,
-            );
+        file.text().then((data) => {
+            const { title, description, cells } = importPuzzle(format, data);
+            onReset(cells, title, description);
         });
     };
 
@@ -149,29 +143,36 @@ const App = () => {
     return (
         <>
             <Modal
-                title="Help"
-                onClose={() => setCurrentModal(ModalType.None)}
-                show={currentModal === ModalType.Help}
+                title="Guide"
+                onClose={() => setModal(ModalType.None)}
+                show={modal === ModalType.HelpGuide}
             >
-                <HelpView key={ModalType.Help} />
+                <HelpGuide />
+            </Modal>
+            <Modal
+                title="About"
+                onClose={() => setModal(ModalType.None)}
+                show={modal === ModalType.HelpAbout}
+            >
+                <HelpAbout />
             </Modal>
             <Modal
                 title="New"
-                onClose={() => setCurrentModal(ModalType.None)}
-                show={currentModal === ModalType.New}
+                onClose={() => setModal(ModalType.None)}
+                show={modal === ModalType.New}
             >
                 <NewDialog
                     onNewCells={(cells) => {
                         onReset(cells);
-                        setCurrentModal(ModalType.None);
+                        setModal(ModalType.None);
                     }}
-                    onCancel={() => setCurrentModal(ModalType.None)}
+                    onCancel={() => setModal(ModalType.None)}
                 />
             </Modal>
             <Modal
                 title="Print Preview"
-                onClose={() => setCurrentModal(ModalType.None)}
-                show={currentModal === ModalType.PrintPreview}
+                onClose={() => setModal(ModalType.None)}
+                show={modal === ModalType.PrintPreview}
             >
                 <PrintPreview
                     title={title}
@@ -179,53 +180,44 @@ const App = () => {
                     cells={cells}
                 />
             </Modal>
+
+            <Modal
+                title="Anagram Solver"
+                onClose={() => setModal(ModalType.None)}
+                show={modal === ModalType.AnagramSolver}
+            >
+                <AnagramSolver />
+            </Modal>
+            <Modal
+                title="Export"
+                onClose={() => setModal(ModalType.None)}
+                show={modal === ModalType.Export}
+            >
+                <Export title={title} description={description} cells={cells} />
+            </Modal>
+
             <input
                 type="file"
                 ref={fileChooserInput}
-                onChange={(e) => importJson(e.target.files)}
+                onChange={(e) => onImportSelected(e.target.files)}
                 className={"hidden"}
             />
+
             <div className="h-full flex flex-col">
-                <MenuBar>
-                    <MenuItem label="New" onClick={onNew} />
-                    <MenuItem label="Import">
-                        <MenuItem label="JSON" onClick={onImportJson} />
-                    </MenuItem>
-                    <MenuItem label="Export">
-                        <MenuItem
-                            label="JSON"
-                            onClick={() => onExport("json")}
-                        />
-                        <MenuItem
-                            label="Ascii"
-                            onClick={() => onExport("ascii")}
-                        />
-                        <MenuItem
-                            label="Unicode"
-                            onClick={() => onExport("unicode")}
-                        />
-                        <MenuItem
-                            label="LaTeX"
-                            onClick={() => onExport("latex")}
-                        />
-                        <MenuItem label="XML" onClick={() => onExport("xml")} />
-                    </MenuItem>
-                    <MenuItem label="View">
-                        <MenuItem label="Zoom in" onClick={onZoomIn} />
-                        <MenuItem label="Zoom out" onClick={onZoomOut} />
-                        <MenuItem label="Reset zoom" onClick={onZoomReset} />
-                        <MenuItem
-                            label="Print Preview"
-                            onClick={() =>
-                                setCurrentModal(ModalType.PrintPreview)
-                            }
-                        />
-                    </MenuItem>
-                    <MenuItem
-                        label="Help"
-                        onClick={() => setCurrentModal(ModalType.Help)}
-                    />
-                </MenuBar>
+                <MenuBar
+                    onNew={onNew}
+                    onImport={onImport}
+                    onExport={() => setModal(ModalType.Export)}
+                    onZoom={onZoom}
+                    onPrintPreview={() => setModal(ModalType.PrintPreview)}
+                    onAnagramSolver={() => setModal(ModalType.AnagramSolver)}
+                    onHelpGuide={() => setModal(ModalType.HelpGuide)}
+                    onHelpAbout={() => setModal(ModalType.HelpAbout)}
+                    onHelpBug={() => {
+                        window.location.href =
+                            "https://github.com/dominicprice/quarrel/issues";
+                    }}
+                ></MenuBar>
                 <div className="h-full flex flex-col">
                     <div className="flex flex-col gap-4 p-4 items-center">
                         <input

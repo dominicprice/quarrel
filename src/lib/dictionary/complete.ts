@@ -1,8 +1,18 @@
 import remoteTrie, { Trie } from "./trie";
 
-async function completeWord(word: string, limit: number): Promise<string[]> {
+async function completeWord(
+    word: string,
+    limit: number,
+): Promise<[string[], boolean]> {
     const trie = await remoteTrie;
-    return completeWordInner(word.toUpperCase(), trie, limit);
+
+    // request one more completion that the limit we are given. if we receive that
+    // many then there are more possible completions than those we have already
+    // generated
+    const completions = completeWordInner(word.toUpperCase(), trie, limit + 1);
+    const more = completions.length > limit;
+    completions.pop();
+    return [completions, more];
 }
 
 function completeWordInner(word: string, trie: Trie, limit: number): string[] {

@@ -1,5 +1,7 @@
 import classNames from "classnames";
 
+type ModalSize = "sm" | "lg";
+
 interface ModalHeaderProps {
     title: string;
     onClose: () => void;
@@ -34,10 +36,13 @@ interface ModalProps {
     title: string;
     children: JSX.Element;
     show: boolean;
+    size?: ModalSize;
     onClose: () => void;
 }
 
-const Modal = ({ title, children, show, onClose }: ModalProps) => {
+const Modal = ({ title, children, show, onClose, size }: ModalProps) => {
+    if (!show) return null;
+
     return (
         <div
             className={classNames(
@@ -49,7 +54,7 @@ const Modal = ({ title, children, show, onClose }: ModalProps) => {
                 "fixed",
                 "bg-black",
                 "bg-opacity-50",
-                { flex: show, hidden: !show },
+                "flex",
             )}
         >
             <div
@@ -58,8 +63,10 @@ const Modal = ({ title, children, show, onClose }: ModalProps) => {
                     "flex-col",
                     "w-[90vw]",
                     "h-[90vh]",
-                    "md:w-[684px]",
-                    "md:h-[70vh]",
+                    {
+                        "md:w-[684px]": size === "lg",
+                        "md:h-[70vh]": size === "lg",
+                    },
                     "bg-white",
                     "shadow",
                 )}
