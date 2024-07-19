@@ -6,7 +6,6 @@ interface CompletionListProps {
     completions: string[] | null;
     more?: boolean;
     onSelect?: (completion: string) => void;
-    hoverClassName?: string;
 }
 
 const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(

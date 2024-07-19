@@ -13,11 +13,12 @@ const Completion = ({ word, onSelect }: CompletionProps) => {
                 "px-8",
                 "w-full",
                 "block",
-                "hover:bg-amber-50",
+                { "hover:bg-amber-50": onSelect !== undefined },
                 "border-b",
                 "border-neutral-50",
                 "text-xs",
             )}
+            disabled={onSelect === undefined}
             onClick={onSelect && (() => onSelect(word))}
         >
             {word}

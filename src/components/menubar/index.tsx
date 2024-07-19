@@ -10,6 +10,7 @@ type MenuBarProps = {
     onZoom: (delta: number | null) => void;
     onPrintPreview: () => void;
     onAnagramSolver: () => void;
+    onWordFinder: () => void;
     onHelpGuide: () => void;
     onHelpAbout: () => void;
     onHelpBug: () => void;
@@ -23,6 +24,7 @@ const MenuBar = memo(
         onZoom,
         onPrintPreview,
         onAnagramSolver,
+        onWordFinder,
         onHelpGuide,
         onHelpAbout,
         onHelpBug,
@@ -76,7 +78,11 @@ const MenuBar = memo(
                         label="Anagram solver"
                         onClick={onAnagramSolver}
                     />
-                    <MenuItem level={1} label="Word finder" />
+                    <MenuItem
+                        level={1}
+                        label="Word finder"
+                        onClick={onWordFinder}
+                    />
                 </MenuItem>
                 <MenuItem level={0} label="Help">
                     <MenuItem level={1} label="Guide" onClick={onHelpGuide} />

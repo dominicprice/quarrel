@@ -1,14 +1,11 @@
 import { ChangeEvent, useRef, useState } from "react";
-import slugify from "slugify";
 import { useLocalStorage } from "usehooks-ts";
 import Clues from "#/components/clues";
 import Grid from "#/components/grid";
 import MenuBar from "#/components/menubar";
 import NewDialog from "#/components/newdialog";
-import { stringToBlob } from "#/lib/blob";
 import Cells from "#/lib/cells";
 import Dir from "#/lib/dir";
-import exportPuzzle, { ExportFormat } from "#/lib/export";
 import Modal from "#/lib/modal";
 import Position from "#/lib/position";
 import Export from "./components/export";
@@ -16,6 +13,7 @@ import HelpAbout from "./components/help/about";
 import HelpGuide from "./components/help/guide";
 import PrintPreview from "./components/printpreview";
 import AnagramSolver from "./components/tools/anagramsolver";
+import WordFinder from "./components/tools/wordfinder";
 import importPuzzle, { ImportFormat } from "./lib/import";
 import Split from "./lib/split";
 import { getDefaultScale } from "./lib/utils";
@@ -28,6 +26,7 @@ enum ModalType {
     PrintPreview = 4,
     AnagramSolver = 5,
     Export = 6,
+    WordFinder = 7,
 }
 
 const App = () => {
@@ -189,6 +188,13 @@ const App = () => {
                 <AnagramSolver />
             </Modal>
             <Modal
+                title="Word Finder"
+                onClose={() => setModal(ModalType.None)}
+                show={modal === ModalType.WordFinder}
+            >
+                <WordFinder />
+            </Modal>
+            <Modal
                 title="Export"
                 onClose={() => setModal(ModalType.None)}
                 show={modal === ModalType.Export}
@@ -211,6 +217,7 @@ const App = () => {
                     onZoom={onZoom}
                     onPrintPreview={() => setModal(ModalType.PrintPreview)}
                     onAnagramSolver={() => setModal(ModalType.AnagramSolver)}
+                    onWordFinder={() => setModal(ModalType.WordFinder)}
                     onHelpGuide={() => setModal(ModalType.HelpGuide)}
                     onHelpAbout={() => setModal(ModalType.HelpAbout)}
                     onHelpBug={() => {

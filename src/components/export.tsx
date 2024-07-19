@@ -4,6 +4,7 @@ import downloadAsBlob from "#/lib/blob";
 import Cells from "#/lib/cells";
 import convertExportData from "#/lib/export/data";
 import renderTemplate, { builtinTemplates } from "#/lib/export/templates";
+import Select from "#/lib/select";
 
 const fontSizes = ["Tiny", "Small", "Medium", "Large", "Huge"];
 
@@ -70,11 +71,7 @@ const Export = ({ title, description, cells }: ExportProps) => {
         <div className="flex flex-col h-full gap-2">
             <div className="flex flex-row">
                 <div className="flex flex-col sm:flex-row gap-1 items-center">
-                    <select
-                        className="w-48 p-2 bg-white border shadow after:content-['v']"
-                        onChange={(e) => onBuiltinSelected(e.target.value)}
-                        style={{ WebkitAppearance: "none" }}
-                    >
+                    <Select onChange={onBuiltinSelected}>
                         <option disabled>Select template</option>
                         {Object.getOwnPropertyNames(builtinTemplates).map(
                             (n) => (
@@ -83,25 +80,20 @@ const Export = ({ title, description, cells }: ExportProps) => {
                                 </option>
                             ),
                         )}
-                    </select>
-                    <select
-                        className="w-48 p-2 bg-white border shadow"
-                        onChange={(e) => setFontSize(e.target.value)}
-                        value={fontSize}
-                        style={{ WebkitAppearance: "none" }}
-                    >
+                    </Select>
+                    <Select onChange={setFontSize} value={fontSize}>
                         <option disabled>Select font size</option>
                         {fontSizes.map((n) => (
                             <option key={n} value={n}>
                                 {n}
                             </option>
                         ))}
-                    </select>
+                    </Select>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-1 items-center order-2 ml-auto">
                     <button
                         className={classNames(
-                            "text-white w-32 p-2 border shadow",
+                            "text-white w-32 p-2 border shadow transition",
                             {
                                 "bg-blue-600": !copied,
                                 "bg-neutral-300": copied,
@@ -124,13 +116,13 @@ const Export = ({ title, description, cells }: ExportProps) => {
                 <textarea
                     value={template}
                     onChange={(e) => setTemplate(e.target.value)}
-                    className="basis-1/2 border resize-none font-mono"
+                    className="basis-1/2 border resize-none font-mono p-1"
                     style={{ fontSize: fontSizeToPx(fontSize) }}
                 ></textarea>
                 <textarea
                     value={output || error}
                     className={classNames(
-                        "basis-1/2 border resize-none font-mono bg-neutral-50",
+                        "basis-1/2 border resize-none font-mono bg-neutral-50 p-1",
                         {
                             "text-red-400": error,
                         },

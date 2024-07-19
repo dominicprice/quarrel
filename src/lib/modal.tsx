@@ -1,7 +1,5 @@
 import classNames from "classnames";
 
-type ModalSize = "sm" | "lg";
-
 interface ModalHeaderProps {
     title: string;
     onClose: () => void;
@@ -25,7 +23,7 @@ const ModalHeader = ({ title, onClose }: ModalHeaderProps) => {
                     className="text-white font-bold text-xl leading-3"
                     onClick={onClose}
                 >
-                    ×
+                    <img src="/cross.svg" className="w-6 h-6 invert" />
                 </button>
             </div>
         </div>
@@ -36,11 +34,10 @@ interface ModalProps {
     title: string;
     children: JSX.Element;
     show: boolean;
-    size?: ModalSize;
     onClose: () => void;
 }
 
-const Modal = ({ title, children, show, onClose, size }: ModalProps) => {
+const Modal = ({ title, children, show, onClose }: ModalProps) => {
     if (!show) return null;
 
     return (
@@ -63,10 +60,6 @@ const Modal = ({ title, children, show, onClose, size }: ModalProps) => {
                     "flex-col",
                     "w-[90vw]",
                     "h-[90vh]",
-                    {
-                        "md:w-[684px]": size === "lg",
-                        "md:h-[70vh]": size === "lg",
-                    },
                     "bg-white",
                     "shadow",
                 )}
