@@ -12,7 +12,8 @@ async function anagramWord(word: string): Promise<string[]> {
         if (letterCounts[letter] === undefined) letterCounts[letter] = 1;
         else ++letterCounts[letter];
     }
-    return anagramWordInner(letterCounts, [], trie, letters.length);
+    const res = anagramWordInner(letterCounts, [], trie, letters.length);
+    return res;
 }
 
 function anagramWordInner(
@@ -21,24 +22,39 @@ function anagramWordInner(
     trie: Trie,
     wordLength: number,
 ): string[] {
-    if (trie[""] !== undefined && path.length === wordLength)
+    if (trie[""] !== undefined && path.length === wordLength) {
         return [path.join("")];
+    }
 
     const words = [];
     for (const [letter, subTrie] of Object.entries(trie)) {
-        const count = letterCounts[letter] ?? 0;
-        if (count === 0) continue;
-        --letterCounts[letter];
-        path.push(letter);
-        const subWords = anagramWordInner(
-            letterCounts,
-            path,
-            subTrie,
-            wordLength,
-        );
+        let subWords = [];
+        if (letter === "-" || letter === " ") {
+            path.push(letter);
+            ++wordLength;
+            subWords = anagramWordInner(
+                letterCounts,
+                path,
+                subTrie,
+                wordLength,
+            );
+            path.pop();
+            --wordLength;
+        } else {
+            const count = letterCounts[letter] ?? 0;
+            if (count === 0) continue;
+            --letterCounts[letter];
+            path.push(letter);
+            subWords = anagramWordInner(
+                letterCounts,
+                path,
+                subTrie,
+                wordLength,
+            );
+            path.pop();
+            letterCounts[letter] = count;
+        }
         for (const word of subWords) words.push(word);
-        path.pop();
-        letterCounts[letter] = count;
     }
     return words;
 }

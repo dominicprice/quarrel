@@ -10,7 +10,7 @@ const WordFinder = () => {
     useEffect(() => {
         if (letters.length === 0) {
             setError("at least one letter required");
-        } else if (letters.match(/^[a-zA-Z\?]+$/) === null) {
+        } else if (letters.match(/^[a-zA-Z\? ]+$/) === null) {
             setError(
                 "can only seach patterns containing letters A-Z and question marks '?'",
             );
@@ -52,7 +52,7 @@ const WordFinder = () => {
                 {solutions !== null && solutions.length > 0 ? (
                     <ul className="flex flex-col gap-2 flex-wrap h-[50vh]">
                         {solutions.map((s) => (
-                            <li>{s}</li>
+                            <li key={s}>{s}</li>
                         ))}
                     </ul>
                 ) : (

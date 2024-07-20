@@ -101,10 +101,21 @@ const App = () => {
     const onAnswerChanged = (pos: Position, dir: Dir, value: string) => {
         updateCells((cells) => {
             pos = [...pos];
-            for (let i = 0; i < value.length; i++) {
-                cells.setValue(pos, value[i]);
-                if (dir === Dir.Across) ++pos[1];
-                else ++pos[0];
+            let isOwnSplit = false;
+            for (const c of value) {
+                if (c === " ") {
+                    isOwnSplit = true;
+                    cells.setSplit(pos, dir, Split.Space);
+                } else if (c === "-") {
+                    isOwnSplit = true;
+                    cells.setSplit(pos, dir, Split.Hyphen);
+                } else {
+                    if (!isOwnSplit) cells.setSplit(pos, dir, Split.None);
+                    isOwnSplit = false;
+                    cells.setValue(pos, c);
+                    if (dir === Dir.Across) ++pos[1];
+                    else ++pos[0];
+                }
             }
             return cells;
         });

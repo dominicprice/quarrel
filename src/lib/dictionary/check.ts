@@ -2,11 +2,7 @@ import remoteTrie, { Trie } from "./trie";
 
 async function checkWord(word: string): Promise<boolean> {
     const trie = await remoteTrie;
-    const words = word.toUpperCase().split(/[\s\-]/);
-    for (const w of words) {
-        if (!checkWordInner(w, trie)) return false;
-    }
-    return true;
+    return checkWordInner(word.toUpperCase(), trie);
 }
 
 function checkWordInner(word: string, trie: Trie): boolean {

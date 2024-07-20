@@ -76,6 +76,17 @@ class Cells {
         this.recalculateClues();
     };
 
+    setSplit = (pos: Position, dir: Dir, split: Split) => {
+        const cell = this.at(pos);
+        if (cell.value === "") this.setValue(pos, "?");
+        if (dir === Dir.Across) {
+            if (pos[1] > 0) cell.splitLeft = split;
+        } else {
+            if (pos[0] > 0) cell.splitAbove = split;
+        }
+        this.recalculateClues();
+    };
+
     private recalculateClues = () => {
         let num = 1;
         for (let i = 0; i < this.size(); ++i) {

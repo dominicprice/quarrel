@@ -50,7 +50,7 @@ const AnagramSolver = () => {
                 {solutions !== null && solutions.length > 0 ? (
                     <ul className="flex flex-col gap-2 flex-wrap h-[50vh]">
                         {solutions.map((s) => (
-                            <li>{s}</li>
+                            <li key={s}>{s}</li>
                         ))}
                     </ul>
                 ) : (
