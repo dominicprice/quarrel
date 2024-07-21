@@ -5,16 +5,14 @@ async function completeWord(
     limit: number,
 ): Promise<[string[], boolean]> {
     const trie = await remoteTrie;
+    word = word.replace(/[ \-]/g, "").toUpperCase();
 
-    word = word.replace(/[ \-]/g, "");
-
-    console.log("replacing", word);
     // request one more completion that the limit we are given. if we receive that
     // many then there are more possible completions than those we have already
     // generated
-    const completions = completeWordInner(word.toUpperCase(), trie, limit + 1);
+    const completions = completeWordInner(word, trie, limit + 1);
     if (completions.length > limit) {
-        completions.pop;
+        completions.pop();
         return [completions, true];
     }
     return [completions, false];
