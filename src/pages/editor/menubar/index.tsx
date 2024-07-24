@@ -7,6 +7,7 @@ type MenuBarProps = {
     onNew: () => void;
     onImport: (format: ImportFormat) => void;
     onExport: () => void;
+    onGenerate: () => void;
     onZoom: (delta: number | null) => void;
     onPrintPreview: () => void;
     onAnagramSolver: () => void;
@@ -21,6 +22,7 @@ const MenuBar = memo(
         onNew,
         onImport,
         onExport,
+        onGenerate,
         onZoom,
         onPrintPreview,
         onAnagramSolver,
@@ -49,6 +51,7 @@ const MenuBar = memo(
                         />
                     </MenuItem>
                     <MenuItem level={1} label="Export" onClick={onExport} />
+                    <MenuItem level={1} label="Generate" onClick={onGenerate} />
                 </MenuItem>
                 <MenuItem level={0} label="View">
                     <MenuItem

@@ -12,14 +12,14 @@
       "row": {{:row}},
       "col": {{:col}},
       "clue": "{{:clue}}",
-      "answer": "{{:answer}}",
+      "answer": "{{:answer}}"
     },{{/for}}{{for acrossClues start=-1}}
     {
       "num": {{:num}},
       "row": {{:row}},
       "col": {{:col}},
       "clue": "{{:clue}}",
-      "answer": "{{:answer}}",
+      "answer": "{{:answer}}"
     }{{/for}}
   ],
   "downClues": [{{for downClues end=-1}}
@@ -28,14 +28,14 @@
       "row": {{:row}},
       "col": {{:col}},
       "clue": "{{:clue}}",
-      "answer": "{{:answer}}",
+      "answer": "{{:answer}}"
     },{{/for}}{{for downClues start=-1}}
     {
       "num": {{:num}},
       "row": {{:row}},
       "col": {{:col}},
       "clue": "{{:clue}}",
-      "answer": "{{:answer}}",
+      "answer": "{{:answer}}"
     }{{/for}}
   ]
 }

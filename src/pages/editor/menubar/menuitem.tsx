@@ -58,7 +58,10 @@ const MenuItem = memo(({ label, onClick, children, level }: MenuItemProps) => {
         >
             <div className="select-none flex flex-row">{label}</div>
             {level === 1 && children && (
-                <img className="w-4 h-4 invert" src="/chevron-right.svg" />
+                <img
+                    className="w-4 h-4 invert"
+                    src="/assets/chevron-right.svg"
+                />
             )}
             {children ? (
                 <div

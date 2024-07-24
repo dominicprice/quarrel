@@ -20,7 +20,7 @@ const Select = ({ onChange, disabled, value, children }: SelectProps) => {
                 {children}
             </select>
             <img
-                src="/chevron-down.svg"
+                src="/assets/chevron-down.svg"
                 className="absolute right-1 w-4 h-4 top-3"
             />
         </div>

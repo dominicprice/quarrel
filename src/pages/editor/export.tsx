@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { useEffect, useMemo, useState } from "react";
+import slugify from "slugify";
 import downloadAsBlob from "#/lib/blob";
 import Cells from "#/lib/cells";
 import convertExportData from "#/lib/export/data";
@@ -35,6 +36,7 @@ const Export = ({ title, description, cells }: ExportProps) => {
     const [error, setError] = useState("");
     const [fontSize, setFontSize] = useState("Small");
     const [copied, setCopied] = useState(false);
+    const [filename, setFilename] = useState("");
 
     const data = useMemo(
         () => convertExportData(title, description, cells),
@@ -42,8 +44,12 @@ const Export = ({ title, description, cells }: ExportProps) => {
     );
 
     const onBuiltinSelected = (name: string) => {
-        if (name === "") setTemplate("");
-        setTemplate(builtinTemplates[name]);
+        for (const tpl of builtinTemplates) {
+            if (tpl.name === name) {
+                setTemplate(tpl.template);
+                setFilename(slugify(title || "crossword") + tpl.fileExtension);
+            }
+        }
     };
 
     const onCopy = () => {
@@ -52,7 +58,7 @@ const Export = ({ title, description, cells }: ExportProps) => {
     };
 
     const onDownload = () => {
-        downloadAsBlob(output, "crossword");
+        downloadAsBlob(output, filename || "crossword.txt");
     };
 
     useEffect(() => {
@@ -73,13 +79,11 @@ const Export = ({ title, description, cells }: ExportProps) => {
                 <div className="flex flex-col sm:flex-row gap-1 items-center">
                     <Select onChange={onBuiltinSelected}>
                         <option disabled>Select template</option>
-                        {Object.getOwnPropertyNames(builtinTemplates).map(
-                            (n) => (
-                                <option key={n} value={n}>
-                                    {n}
-                                </option>
-                            ),
-                        )}
+                        {builtinTemplates.map((tpl) => (
+                            <option key={tpl.name} value={tpl.name}>
+                                {tpl.name}
+                            </option>
+                        ))}
                     </Select>
                     <Select onChange={setFontSize} value={fontSize}>
                         <option disabled>Select font size</option>
@@ -89,6 +93,13 @@ const Export = ({ title, description, cells }: ExportProps) => {
                             </option>
                         ))}
                     </Select>
+                    <input
+                        type="text"
+                        className="w-48 p-2 border shadow"
+                        value={filename}
+                        placeholder="Filename"
+                        onChange={(e) => setFilename(e.target.value)}
+                    />
                 </div>
                 <div className="flex flex-col sm:flex-row gap-1 items-center order-2 ml-auto">
                     <button

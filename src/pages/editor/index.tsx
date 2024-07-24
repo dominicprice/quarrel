@@ -1,22 +1,26 @@
 import { ChangeEvent, useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useLocalStorage } from "usehooks-ts";
-import Clues from "#/components/clues";
-import Grid from "#/components/grid";
-import MenuBar from "#/components/menubar";
-import NewDialog from "#/components/newdialog";
 import Cells from "#/lib/cells";
 import Dir from "#/lib/dir";
+import convertExportData from "#/lib/export/data";
+import renderTemplate, { templateFromName } from "#/lib/export/templates";
+import importPuzzle, { ImportFormat } from "#/lib/import";
 import Modal from "#/lib/modal";
 import Position from "#/lib/position";
-import Export from "./components/export";
-import HelpAbout from "./components/help/about";
-import HelpGuide from "./components/help/guide";
-import PrintPreview from "./components/printpreview";
-import AnagramSolver from "./components/tools/anagramsolver";
-import WordFinder from "./components/tools/wordfinder";
-import importPuzzle, { ImportFormat } from "./lib/import";
-import Split from "./lib/split";
-import { getDefaultScale } from "./lib/utils";
+import Split from "#/lib/split";
+import { getDefaultScale, uuidv4 } from "#/lib/utils";
+import Clues from "./clues";
+import Export from "./export";
+import Grid from "./grid";
+import HelpAbout from "./help/about";
+import HelpGuide from "./help/guide";
+import MenuBar from "./menubar";
+import NewDialog from "./newdialog";
+import PrintPreview from "./printpreview";
+import AnagramSolver from "./tools/anagramsolver";
+import WordFinder from "./tools/wordfinder";
 
 enum ModalType {
     None = 0,
@@ -29,7 +33,7 @@ enum ModalType {
     WordFinder = 7,
 }
 
-const App = () => {
+const Editor = () => {
     const fileChooserInput = useRef(null as HTMLInputElement | null);
 
     const [cells, setCells] = useLocalStorage("cells", new Cells(15), {
@@ -80,10 +84,91 @@ const App = () => {
         if (files === null || files.length === 0) return;
         const file = files.item(0);
         if (file === null) return;
-        file.text().then((data) => {
-            const { title, description, cells } = importPuzzle(format, data);
-            onReset(cells, title, description);
+        file.text()
+            .then((data) => {
+                const { title, description, cells } = importPuzzle(
+                    format,
+                    data,
+                );
+                onReset(cells, title, description);
+            })
+            .catch((err) => {
+                console.log(err);
+                toast(
+                    <>
+                        <p>Failed to import crossword</p>
+                        <p className="text-sm">See console for more details</p>
+                    </>,
+                    { type: "error" },
+                );
+            });
+    };
+
+    const onGenerate = () => {
+        const id = uuidv4();
+
+        toast("Generating crossword", {
+            toastId: id,
+            type: "info",
+            isLoading: true,
         });
+        const jsonTemplate = templateFromName("JSON");
+        if (jsonTemplate === null) {
+            console.log("could not find JSON template");
+            return;
+        }
+        const exportData = convertExportData(title, description, cells);
+        const body = renderTemplate(jsonTemplate.template, exportData);
+        fetch("https://jsonblob.com/api/jsonBlob", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: body,
+        })
+            .then((resp) => {
+                if (!resp.ok) {
+                    throw new Error("failed to upload json blob");
+                }
+                const location = resp.headers.get("Location");
+                if (!location) throw new Error("no location returned");
+                const pathSegments = location.split("/");
+                const blobId = pathSegments.pop() || pathSegments.pop();
+                if (!blobId) throw new Error("failed to resolve blob id");
+                return blobId;
+            })
+            .then((blobId) => {
+                const url = "/view?blobid=" + blobId;
+                toast.update(id, {
+                    render: () => (
+                        <>
+                            Generated crossword, click{" "}
+                            <a className="text-sky-600 underline" href={url}>
+                                here
+                            </a>{" "}
+                            to view
+                        </>
+                    ),
+                    type: "success",
+                    isLoading: false,
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                toast.update(id, {
+                    render: () => (
+                        <>
+                            <p>Failed to generate crossword</p>
+                            <p className="text-sm">
+                                See console for more details
+                            </p>
+                        </>
+                    ),
+                    type: "error",
+                    isLoading: false,
+                });
+            });
     };
 
     const onClueChanged = (pos: Position, dir: Dir, value: string) => {
@@ -152,6 +237,7 @@ const App = () => {
 
     return (
         <>
+            <ToastContainer />
             <Modal
                 title="Guide"
                 onClose={() => setModal(ModalType.None)}
@@ -225,6 +311,7 @@ const App = () => {
                     onNew={onNew}
                     onImport={onImport}
                     onExport={() => setModal(ModalType.Export)}
+                    onGenerate={onGenerate}
                     onZoom={onZoom}
                     onPrintPreview={() => setModal(ModalType.PrintPreview)}
                     onAnagramSolver={() => setModal(ModalType.AnagramSolver)}
@@ -278,4 +365,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default Editor;

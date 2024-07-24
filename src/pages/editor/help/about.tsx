@@ -16,7 +16,7 @@ const HelpAbout = () => {
             </p>
             <hr className="my-2" />
             <p>Quarrel is released under the MIT licence</p>
-            <p className="whitespace-pre-wrap">{LICENCE}</p>
+            <p className="whitespace-pre-wrap">{APP_LICENCE}</p>
         </div>
     );
 };

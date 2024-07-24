@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import Cells from "#/lib/cells";
 import Select from "#/lib/select";
-import Cells from "../lib/cells";
-import { templates } from "../lib/templates";
+import { templates } from "#/lib/templates";
 import Grid from "./grid";
 
 const GRID_SIZE_MIN = 3;

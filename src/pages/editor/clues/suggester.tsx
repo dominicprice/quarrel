@@ -16,11 +16,11 @@ function modeIndicator(mode: SuggestMode): [string, string] {
         case SuggestMode.Unknown:
             return ["", "hidden"];
         case SuggestMode.Incomplete:
-            return ["/search.svg", "bg-blue-600"];
+            return ["/assets/search.svg", "bg-blue-600"];
         case SuggestMode.Correct:
-            return ["/tick.svg", "bg-green-600"];
+            return ["/assets/tick.svg", "bg-green-600"];
         case SuggestMode.Incorrect:
-            return ["/cross.svg", "bg-red-600"];
+            return ["/assets/cross.svg", "bg-red-600"];
     }
 }
 

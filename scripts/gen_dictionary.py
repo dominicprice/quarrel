@@ -80,7 +80,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "path",
         nargs="?",
-        default="public/dictionary.json.gzip",
+        default="public/assets/dictionary.json.gzip",
         help="Output file path",
     )
     args = parser.parse_args()

@@ -12,9 +12,9 @@ enum AnagramMode {
 function modeIndicator(mode: AnagramMode): [string, string] {
     switch (mode) {
         case AnagramMode.Incomplete:
-            return ["/shuffle.svg", "bg-neutral-600"];
+            return ["/assets/shuffle.svg", "bg-neutral-600"];
         case AnagramMode.Complete:
-            return ["/shuffle.svg", "bg-purple-600"];
+            return ["/assets/shuffle.svg", "bg-purple-600"];
     }
 }
 

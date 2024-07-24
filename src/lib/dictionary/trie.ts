@@ -1,6 +1,6 @@
 type Trie = { [key: string]: Trie };
 
-const remoteTrie: Promise<Trie> = fetch("/dictionary.json.gzip")
+const remoteTrie: Promise<Trie> = fetch("/assets/dictionary.json.gzip")
     .then((resp) => resp.blob())
     .then((blob) => {
         const ds = new DecompressionStream("gzip");

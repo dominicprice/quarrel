@@ -10,21 +10,66 @@ import { ExportData } from "./data";
 
 const renderer = jsrender();
 
-const builtinTemplates: Record<string, string> = {
-    Blank: "",
-    JSON: jsonTemplate,
-    Guide: guideTemplate,
-    LaTeX: latexTemplate,
-    XML: xmlTemplate,
-    Plaintext: plaintextTemplate,
-    MarkDown: markdownTemplate,
-    "Standalone HTML": htmlTemplate,
-};
+interface Template {
+    name: string;
+    fileExtension: string;
+    template: string;
+}
+
+const builtinTemplates: Template[] = [
+    {
+        name: "Blank",
+        fileExtension: ".txt",
+        template: "",
+    },
+    {
+        name: "JSON",
+        fileExtension: ".json",
+        template: jsonTemplate,
+    },
+    {
+        name: "How-to guide",
+        fileExtension: ".txt",
+        template: guideTemplate,
+    },
+    {
+        name: "LaTeX",
+        fileExtension: ".tex",
+        template: latexTemplate,
+    },
+    {
+        name: "XML",
+        fileExtension: ".xml",
+        template: xmlTemplate,
+    },
+    {
+        name: "Plaintext",
+        fileExtension: ".txt",
+        template: plaintextTemplate,
+    },
+    {
+        name: "Markdown",
+        fileExtension: ".md",
+        template: markdownTemplate,
+    },
+    {
+        name: "Standalone HTML",
+        fileExtension: ".html",
+        template: htmlTemplate,
+    },
+];
 
 function renderTemplate(template: string, data: ExportData): string {
     const tmpl = renderer.templates(template);
     return tmpl.render(data);
 }
 
+function templateFromName(name: string): Template | null {
+    for (const tmpl of builtinTemplates) {
+        if (name === tmpl.name) return tmpl;
+    }
+    return null;
+}
+
 export default renderTemplate;
-export { builtinTemplates };
+export { builtinTemplates, templateFromName };

@@ -23,7 +23,7 @@ const ModalHeader = ({ title, onClose }: ModalHeaderProps) => {
                     className="text-white font-bold text-xl leading-3"
                     onClick={onClose}
                 >
-                    <img src="/cross.svg" className="w-6 h-6 invert" />
+                    <img src="/assets/cross.svg" className="w-6 h-6 invert" />
                 </button>
             </div>
         </div>
