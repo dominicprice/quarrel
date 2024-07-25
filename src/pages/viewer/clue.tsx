@@ -15,7 +15,6 @@ const Clue = ({ clue, num, active, onSelected }: ClueProps) => {
         const { current: el } = ref;
         if (!el) return;
 
-        console.log("scrolling", el.closest("div"));
         el.parentElement!.scrollTop = el.offsetTop;
     });
     return (

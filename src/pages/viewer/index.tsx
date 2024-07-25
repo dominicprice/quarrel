@@ -3,14 +3,14 @@ import { ToastContainer, toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import Dir, { toggleDir } from "#/lib/dir";
-import importPuzzle from "#/lib/import";
+import { notifyError } from "#/lib/error";
+import importPuzzle, { getDataUrl } from "#/lib/import";
 import Position from "#/lib/position";
 import { clamp } from "#/lib/utils";
 import Clue from "./clue";
 import Grid from "./grid";
 import SolvableGrid, { SolvableClue } from "./solvablegrid";
 import Stopwatch from "./timer";
-import { getDataUrl } from "./utils";
 
 const allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?";
 const arrowKeys = ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"];
@@ -41,18 +41,7 @@ const Viewer = () => {
                 setDescription(data.description);
                 setCells(SolvableGrid.fromEditableCells(data.cells));
             })
-            .catch((err) => {
-                console.log(err);
-                toast(
-                    <>
-                        <p>Failed to load crossword</p>
-                        <p className="text-sm">See console for more details</p>
-                    </>,
-                    {
-                        type: "error",
-                    },
-                );
-            });
+            .catch((err) => notifyError(err, "Failed to load crossword"));
     }, []);
 
     useEffect(() => {
@@ -254,9 +243,9 @@ const Viewer = () => {
     };
 
     return (
-        <div className="h-full flex flex-col content-center items-center">
+        <div className="min-h-[100vh] flex flex-col content-center items-center">
             <ToastContainer />
-            <div className="h-full flex flex-col max-w-[800px] mt-8 gap-4 items-center">
+            <div className="flex-1 flex flex-col max-w-[800px] mt-8 gap-4 items-center">
                 <div className="flex flex-col gap-4 p-4 items-center">
                     <div className="w-full md:w-[50vw] text-2xl text-center font-serif">
                         {title}
@@ -361,6 +350,24 @@ const Viewer = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div className="h-8 border-t bg-neutral-50 w-full flex flex-row items-center p-2 gap-4">
+                <div>
+                    Made with{" "}
+                    <a className="text-sky-600" href="/">
+                        Quarrel
+                    </a>
+                </div>
+                |
+                <div>
+                    <a
+                        className="text-sky-600"
+                        href={"/" + window.location.search}
+                    >
+                        Open
+                    </a>{" "}
+                    for editing
                 </div>
             </div>
         </div>

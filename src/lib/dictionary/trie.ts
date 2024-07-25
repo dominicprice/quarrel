@@ -1,3 +1,5 @@
+import { notifyError } from "../error";
+
 type Trie = { [key: string]: Trie };
 
 const remoteTrie: Promise<Trie> = fetch("/assets/dictionary.json.gzip")
@@ -8,7 +10,7 @@ const remoteTrie: Promise<Trie> = fetch("/assets/dictionary.json.gzip")
         return new Response(stream);
     })
     .then((resp) => resp.json())
-    .catch((err) => console.log(err));
+    .catch((err) => notifyError(err, "Failed to load dictionary"));
 
 export type { Trie };
 export default remoteTrie;

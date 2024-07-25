@@ -1,12 +1,13 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocalStorage } from "usehooks-ts";
 import Cells from "#/lib/cells";
 import Dir from "#/lib/dir";
+import { notifyError } from "#/lib/error";
 import convertExportData from "#/lib/export/data";
 import renderTemplate, { templateFromName } from "#/lib/export/templates";
-import importPuzzle, { ImportFormat } from "#/lib/import";
+import importPuzzle, { ImportFormat, getDataUrl } from "#/lib/import";
 import Modal from "#/lib/modal";
 import Position from "#/lib/position";
 import Split from "#/lib/split";
@@ -50,6 +51,19 @@ const Editor = () => {
     const [modal, setModal] = useState(ModalType.None);
     const [zoom, setZoom] = useState(getDefaultScale(cells.size()));
 
+    useEffect(() => {
+        const dataUrl = getDataUrl();
+        if (dataUrl === null) return;
+
+        fetch(dataUrl)
+            .then((resp) => resp.text())
+            .then((resp) => {
+                const data = importPuzzle("json", resp);
+                onReset(data.cells, data.title, data.description);
+            })
+            .catch((err) => notifyError(err, "Failed to load crossword"));
+    }, []);
+
     const onNew = () => {
         setModal(ModalType.New);
     };
@@ -92,42 +106,39 @@ const Editor = () => {
                 );
                 onReset(cells, title, description);
             })
-            .catch((err) => {
-                console.log(err);
-                toast(
-                    <>
-                        <p>Failed to import crossword</p>
-                        <p className="text-sm">See console for more details</p>
-                    </>,
-                    { type: "error" },
-                );
-            });
+            .catch((err) => notifyError(err, "Failed to import crossword"));
     };
 
     const onGenerate = () => {
-        const id = uuidv4();
-
+        const toastId = uuidv4();
         toast("Generating crossword", {
-            toastId: id,
+            toastId: toastId,
             type: "info",
             isLoading: true,
         });
-        const jsonTemplate = templateFromName("JSON");
-        if (jsonTemplate === null) {
-            console.log("could not find JSON template");
-            return;
-        }
-        const exportData = convertExportData(title, description, cells);
-        const body = renderTemplate(jsonTemplate.template, exportData);
-        fetch("https://jsonblob.com/api/jsonBlob", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: body,
-        })
+
+        Promise.resolve()
+            .then(() => {
+                // Render template
+                const jsonTemplate = templateFromName("JSON");
+                if (jsonTemplate === null)
+                    throw new Error("JSON template unavailable");
+                const exportData = convertExportData(title, description, cells);
+                return renderTemplate(jsonTemplate.template, exportData);
+            })
+            .then((body) => {
+                // Post to storage
+                return fetch("https://jsonblob.com/api/jsonBlob", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: body,
+                });
+            })
             .then((resp) => {
+                // Get storage ID
                 if (!resp.ok) {
                     throw new Error("failed to upload json blob");
                 }
@@ -140,7 +151,7 @@ const Editor = () => {
             })
             .then((blobId) => {
                 const url = "/view?blobid=" + blobId;
-                toast.update(id, {
+                toast.update(toastId, {
                     render: () => (
                         <>
                             Generated crossword, click{" "}
@@ -154,21 +165,9 @@ const Editor = () => {
                     isLoading: false,
                 });
             })
-            .catch((err) => {
-                console.log(err);
-                toast.update(id, {
-                    render: () => (
-                        <>
-                            <p>Failed to generate crossword</p>
-                            <p className="text-sm">
-                                See console for more details
-                            </p>
-                        </>
-                    ),
-                    type: "error",
-                    isLoading: false,
-                });
-            });
+            .catch((err) =>
+                notifyError(err, "Failed to generate crossword", toastId),
+            );
     };
 
     const onClueChanged = (pos: Position, dir: Dir, value: string) => {

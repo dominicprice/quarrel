@@ -16,7 +16,6 @@ const Stopwatch = () => {
                         (iNow.getTime() - startTime) / 1000,
                     );
                     setElapsed(elapsedStart + delta);
-                    console.log(elapsedStart, delta);
                 }, 500),
             );
         } else {
