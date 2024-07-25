@@ -52,19 +52,21 @@ const Grid = ({
         if (activeCell == null) return;
 
         const v = cells.at(activeCell);
-        if (!v.isEmpty()) {
+        if (v.value === "") {
+            move(-1);
+        } else if (v.value === "?") {
+            const w = cells.at([
+                cells.size() - activeCell[0] - 1,
+                cells.size() - activeCell[1] - 1,
+            ]);
+            if (w.isEmpty()) {
+                onCellChanged(activeCell, "");
+            } else {
+                move(-1);
+            }
+        } else {
             onCellChanged(activeCell, "");
-            return;
         }
-        if (moveDir == Dir.Across && v.splitLeft != Split.None) {
-            onCellSplit(activeCell, moveDir, Split.None);
-            return;
-        }
-        if (moveDir == Dir.Down && v.splitAbove != Split.None) {
-            onCellSplit(activeCell, moveDir, Split.None);
-            return;
-        }
-        move(-1);
     };
 
     const onLetter = (value: string) => {
