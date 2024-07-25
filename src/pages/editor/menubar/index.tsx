@@ -54,21 +54,23 @@ const MenuBar = memo(
                     <MenuItem level={1} label="Generate" onClick={onGenerate} />
                 </MenuItem>
                 <MenuItem level={0} label="View">
-                    <MenuItem
-                        level={1}
-                        label="Zoom in"
-                        onClick={() => onZoom(0.1)}
-                    />
-                    <MenuItem
-                        level={1}
-                        label="Zoom out"
-                        onClick={() => onZoom(-0.1)}
-                    />
-                    <MenuItem
-                        level={1}
-                        label="Reset zoom"
-                        onClick={() => onZoom(null)}
-                    />
+                    <MenuItem level={1} label="Zoom">
+                        <MenuItem
+                            level={2}
+                            label="Increase"
+                            onClick={() => onZoom(0.1)}
+                        />
+                        <MenuItem
+                            level={2}
+                            label="Decrease"
+                            onClick={() => onZoom(-0.1)}
+                        />
+                        <MenuItem
+                            level={2}
+                            label="Reset"
+                            onClick={() => onZoom(null)}
+                        />
+                    </MenuItem>
                     <MenuItem
                         level={1}
                         label="Print Preview"

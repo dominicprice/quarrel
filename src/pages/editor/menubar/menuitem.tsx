@@ -24,9 +24,9 @@ function menuClass(level: number): string {
 function subMenuClass(level: number): string {
     switch (level) {
         case 0:
-            return "group-hover/level0:flex w-36 top-10 left-0";
+            return "group-hover/level0:flex min-w-36 top-10 left-0";
         case 1:
-            return "group-hover/level1:flex w-36 left-36 top-0";
+            return "group-hover/level1:flex min-w-36 left-full top-0";
         default:
             throw new Error("too many levels of menu nesting");
     }
@@ -38,7 +38,7 @@ const MenuItem = memo(({ label, onClick, children, level }: MenuItemProps) => {
             onClick={onClick}
             className={classNames(
                 "flex",
-                "align-center",
+                "items-center",
                 {
                     "justify-center": level === 0,
                     "justify-between": level !== 0,
@@ -59,7 +59,7 @@ const MenuItem = memo(({ label, onClick, children, level }: MenuItemProps) => {
             <div className="select-none flex flex-row">{label}</div>
             {level === 1 && children && (
                 <img
-                    className="w-4 h-4 invert"
+                    className="w-4 h-4 invert absolute right-2"
                     src="/assets/chevron-right.svg"
                 />
             )}
