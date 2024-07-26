@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocalStorage } from "usehooks-ts";
@@ -7,7 +7,7 @@ import Dir from "#/lib/dir";
 import { notifyError } from "#/lib/error";
 import convertExportData from "#/lib/export/data";
 import renderTemplate, { templateFromName } from "#/lib/export/templates";
-import importPuzzle, { ImportFormat, getDataUrl } from "#/lib/import";
+import importPuzzle, { ImportFormat } from "#/lib/import";
 import Modal from "#/lib/modal";
 import Position from "#/lib/position";
 import Split from "#/lib/split";
