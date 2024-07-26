@@ -64,7 +64,7 @@ function importXml(rawXml: string): ImportedPuzzle {
         const x = (word.getAttribute("x") || "0").split("-");
         const y = (word.getAttribute("y") || "0").split("-");
         if (y.length > 1) dir = Dir.Down;
-        words[id] = [[parseInt(y[0]), parseInt(x[0])], dir];
+        words[id] = [[parseInt(y[0]) - 1, parseInt(x[0]) - 1], dir];
     }
 
     for (const clues of crossword.getElementsByTagName("clues")) {

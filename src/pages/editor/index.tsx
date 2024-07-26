@@ -34,6 +34,8 @@ enum ModalType {
     WordFinder = 7,
 }
 
+const splitPoint = 1280;
+
 const Editor = () => {
     const fileChooserInput = useRef(null as HTMLInputElement | null);
 
@@ -49,7 +51,7 @@ const Editor = () => {
         deserializer: (j: string) => j,
     });
     const [modal, setModal] = useState(ModalType.None);
-    const [zoom, setZoom] = useState(getDefaultScale(cells.size()));
+    const [zoom, setZoom] = useState(getDefaultScale(cells.size(), splitPoint));
 
     const onNew = () => {
         setModal(ModalType.New);
@@ -59,11 +61,11 @@ const Editor = () => {
         updateCells(() => cells);
         updateTitle(title ?? "");
         updateDescription(description ?? "");
-        setZoom(getDefaultScale(cells.size()));
+        setZoom(getDefaultScale(cells.size(), splitPoint));
     };
 
     const onZoom = (delta: number | null) => {
-        if (delta === null) setZoom(getDefaultScale(cells.size()));
+        if (delta === null) setZoom(getDefaultScale(cells.size(), splitPoint));
         else setZoom(zoom + delta);
     };
 

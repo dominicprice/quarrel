@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import Dir, { toggleDir } from "#/lib/dir";
 import { ImportedPuzzle } from "#/lib/import";
 import Position from "#/lib/position";
-import { clamp } from "#/lib/utils";
+import { clamp, getDefaultScale } from "#/lib/utils";
 import Clue from "./clue";
 import Grid from "./grid";
 import SolvableGrid, { SolvableClue } from "./solvablegrid";
 import Stopwatch from "./timer";
 
 interface PuzzleProps {
-    puzzle: ImportedPuzzle | null;
+    puzzle: ImportedPuzzle;
 }
 
 const allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?";
 const arrowKeys = ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"];
+const splitPoint = 640;
 
 const Puzzle = ({ puzzle }: PuzzleProps) => {
     const [title, setTitle] = useState("");
@@ -23,29 +24,21 @@ const Puzzle = ({ puzzle }: PuzzleProps) => {
     const [activeClue, setActiveClue] = useState<SolvableClue | null>(null);
     const [moveDir, setMoveDir] = useState(Dir.Across);
     const [activeCell, setActiveCell] = useState<Position | null>(null);
+    const [scale, setScale] = useState(1);
 
     useEffect(() => {
-        if (puzzle === null) {
-            setTitle("");
-            setDescription("");
-            setGrid(new SolvableGrid([]));
-            setClues([]);
-            setActiveClue(null);
-            setMoveDir(Dir.Across);
-            setActiveCell(null);
-        } else {
-            const grid = SolvableGrid.fromEditableCells(puzzle.cells);
-            const clues = grid.getClues();
-            const [pos, dir] = grid.findFirstClue();
+        const grid = SolvableGrid.fromEditableCells(puzzle.cells);
+        const clues = grid.getClues();
+        const [pos, dir] = grid.findFirstClue();
 
-            setTitle(puzzle.title);
-            setDescription(puzzle.description);
-            setGrid(grid);
-            setClues(clues);
-            setActiveClue(clues.length > 0 ? clues[0] : null);
-            setMoveDir(dir);
-            setActiveCell(pos);
-        }
+        setTitle(puzzle.title);
+        setDescription(puzzle.description);
+        setGrid(grid);
+        setClues(clues);
+        setActiveClue(clues.length > 0 ? clues[0] : null);
+        setMoveDir(dir);
+        setActiveCell(pos);
+        setScale(getDefaultScale(grid.length, splitPoint));
     }, [puzzle]);
 
     useEffect(() => {
@@ -235,7 +228,7 @@ const Puzzle = ({ puzzle }: PuzzleProps) => {
 
     return (
         <>
-            <div className="flex-1 flex flex-col max-w-[800px] mt-8 gap-4 items-center">
+            <div className="flex-1 flex flex-col mt-8 gap-4 items-center">
                 <div className="flex flex-col gap-4 p-4 items-center">
                     <div className="w-full md:w-[50vw] text-2xl text-center font-serif">
                         {title}
@@ -283,6 +276,7 @@ const Puzzle = ({ puzzle }: PuzzleProps) => {
                         )}
                         <div>
                             <Grid
+                                scale={scale}
                                 cells={grid}
                                 onKeyDown={onKeyDown}
                                 onCellClicked={onCellClicked}

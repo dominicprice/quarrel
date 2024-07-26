@@ -8,7 +8,7 @@ function clamp(x: number, min: number, max: number): number {
     return x;
 }
 
-function getDefaultScale(gridSize: number): number {
+function getDefaultScale(gridSize: number, splitPoint: number): number {
     const vw = Math.max(
         document.documentElement.clientWidth || 0,
         window.innerWidth || 0,
@@ -17,7 +17,7 @@ function getDefaultScale(gridSize: number): number {
     if (vw === 0) return 1;
 
     // maximum amount of space on the screen we can use
-    const maxWidth = (vw < 1280 ? vw : vw / 2) * 0.9;
+    const maxWidth = (vw < splitPoint ? vw : vw / 2) * 0.9;
     // maximum scale that fits the space
     const maxScale = maxWidth / (40 * gridSize);
     // by default only zoom out

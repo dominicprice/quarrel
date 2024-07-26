@@ -49,6 +49,11 @@ const MenuBar = memo(
                             label="JSON"
                             onClick={() => onImport("json")}
                         />
+                        <MenuItem
+                            level={2}
+                            label="XML"
+                            onClick={() => onImport("xml")}
+                        />
                     </MenuItem>
                     <MenuItem level={1} label="Export" onClick={onExport} />
                     <MenuItem level={1} label="Generate" onClick={onGenerate} />
