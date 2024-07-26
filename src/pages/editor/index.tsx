@@ -51,19 +51,6 @@ const Editor = () => {
     const [modal, setModal] = useState(ModalType.None);
     const [zoom, setZoom] = useState(getDefaultScale(cells.size()));
 
-    useEffect(() => {
-        const dataUrl = getDataUrl();
-        if (dataUrl === null) return;
-
-        fetch(dataUrl)
-            .then((resp) => resp.text())
-            .then((resp) => {
-                const data = importPuzzle("json", resp);
-                onReset(data.cells, data.title, data.description);
-            })
-            .catch((err) => notifyError(err, "Failed to load crossword"));
-    }, []);
-
     const onNew = () => {
         setModal(ModalType.New);
     };

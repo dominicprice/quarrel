@@ -1,7 +1,8 @@
 import Cells from "../cells";
 import importJson from "./json";
+import importXml from "./xml";
 
-type ImportFormat = "json";
+type ImportFormat = "json" | "xml";
 
 interface ImportedPuzzle {
     title: string;
@@ -11,18 +12,17 @@ interface ImportedPuzzle {
 
 function importPuzzle(format: ImportFormat, data: string): ImportedPuzzle {
     switch (format) {
-        case "json": {
+        case "json":
             return importJson(data);
-        }
+        case "xml":
+            return importXml(data);
     }
 }
 
 function getDataUrl(): string | null {
     const queryParams = new URLSearchParams(window.location.search);
     if (queryParams.has("blobid")) {
-        return "https://jsonblob.com/api/jsonBlob/" + queryParams.get("blobid");
-    } else if (queryParams.has("url")) {
-        return queryParams.get("url");
+        return `https://jsonblob.com/api/jsonBlob/${queryParams.get("blobid")}`;
     }
     return null;
 }
