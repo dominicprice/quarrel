@@ -4,34 +4,40 @@ import Position from "#/lib/position";
 import ClueEntry from "./clueentry";
 
 interface ClueListProps {
-    cells: [Cell, Position][];
-    dir: Dir;
-    onClueChanged: (pos: Position, dir: Dir, value: string) => void;
-    onAnswerChanged: (pos: Position, dir: Dir, value: string) => void;
+	cells: [Cell, Position][];
+	dir: Dir;
+	onClueChanged: (pos: Position, dir: Dir, value: string) => void;
+	onAnswerChanged: (pos: Position, dir: Dir, value: string) => void;
 }
 
 const ClueList = ({
-    cells,
-    dir,
-    onClueChanged,
-    onAnswerChanged,
+	cells,
+	dir,
+	onClueChanged,
+	onAnswerChanged,
 }: ClueListProps) => {
-    return (
-        <>
-            {cells.map(([cell, pos]) => {
-                const clue =
-                    dir == Dir.Across ? cell.acrossClue! : cell.downClue!;
-                return (
-                    <ClueEntry
-                        key={clue.num}
-                        clue={clue}
-                        onClueChanged={(v) => onClueChanged(pos, dir, v)}
-                        onAnswerChanged={(v) => onAnswerChanged(pos, dir, v)}
-                    />
-                );
-            })}
-        </>
-    );
+	if (cells.length == 0) {
+		return (
+			<div className="w-full italic text-neutral-400">
+				No {dir == Dir.Across ? "across" : "down"} clues currently in grid
+			</div>
+		);
+	}
+	return (
+		<div className="max-h-[70dvh] overflow-scroll">
+			{cells.map(([cell, pos]) => {
+				const clue = dir == Dir.Across ? cell.acrossClue! : cell.downClue!;
+				return (
+					<ClueEntry
+						key={clue.num}
+						clue={clue}
+						onClueChanged={(v) => onClueChanged(pos, dir, v)}
+						onAnswerChanged={(v) => onAnswerChanged(pos, dir, v)}
+					/>
+				);
+			})}
+		</div>
+	);
 };
 
 export default ClueList;
