@@ -75,7 +75,7 @@ const GridCell = ({
                     "cursor-pointer",
                     "text-center",
                     "caret-transparent",
-                    "outline-none",
+                    "outline-hidden",
                     "font-block",
                 )}
             />

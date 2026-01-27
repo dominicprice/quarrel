@@ -95,7 +95,7 @@ const Export = ({ title, description, cells }: ExportProps) => {
                     </Select>
                     <input
                         type="text"
-                        className="w-48 p-2 border shadow"
+                        className="w-48 p-2 border shadow-sm"
                         value={filename}
                         placeholder="Filename"
                         onChange={(e) => setFilename(e.target.value)}
@@ -104,7 +104,7 @@ const Export = ({ title, description, cells }: ExportProps) => {
                 <div className="flex flex-col sm:flex-row gap-1 items-center order-2 ml-auto">
                     <button
                         className={classNames(
-                            "text-white w-32 p-2 border shadow transition",
+                            "text-white w-32 p-2 border shadow-sm transition",
                             {
                                 "bg-blue-600": !copied,
                                 "bg-neutral-300": copied,
@@ -116,7 +116,7 @@ const Export = ({ title, description, cells }: ExportProps) => {
                         {copied ? "Copied" : "Copy"}
                     </button>
                     <button
-                        className="w-32 p-2 border shadow bg-green-600 text-white"
+                        className="w-32 p-2 border shadow-sm bg-green-600 text-white"
                         onClick={onDownload}
                     >
                         Download

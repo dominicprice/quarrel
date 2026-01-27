@@ -26,14 +26,14 @@ const PrintPreview = ({ title, description, cells }: PrintPreviewProps) => {
             <div className="flex flex-row gap-2">
                 <ReactToPrint
                     trigger={() => (
-                        <button className="bg-lime-600 text-white shadow py-1 px-2">
+                        <button className="bg-lime-600 text-white shadow-sm py-1 px-2">
                             Print
                         </button>
                     )}
                     content={() => ref}
                 />
                 <button
-                    className="bg-neutral-600 text-white shadow py-1 px-2"
+                    className="bg-neutral-600 text-white shadow-sm py-1 px-2"
                     onClick={() => {
                         setMargin(48);
                         setTextSize(12);
@@ -138,7 +138,7 @@ const PrintPreview = ({ title, description, cells }: PrintPreviewProps) => {
                     </div>
                 </div>
             </div>
-            <div className="border shadow mt-8">
+            <div className="border shadow-sm mt-8">
                 <PrintView
                     ref={(el) => (ref = el)}
                     title={title}

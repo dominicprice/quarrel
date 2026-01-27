@@ -11,7 +11,7 @@ const Select = ({ onChange, disabled, value, children }: SelectProps) => {
     return (
         <div className="relative cursor-pointer">
             <select
-                className="w-48 p-2 bg-white border shadow"
+                className="w-48 p-2 bg-white border shadow-sm"
                 onChange={(e) => onChange && onChange(e.target.value)}
                 disabled={disabled}
                 value={value}

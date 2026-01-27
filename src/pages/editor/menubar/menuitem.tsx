@@ -72,7 +72,7 @@ const MenuItem = memo(({ label, onClick, children, level }: MenuItemProps) => {
                         "flex-col",
                         "items-start",
                         "hidden",
-                        "shadow",
+                        "shadow-sm",
                     )}
                 >
                     {children}

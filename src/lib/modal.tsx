@@ -14,7 +14,7 @@ const ModalHeader = ({ title, onClose }: ModalHeaderProps) => {
                 "h-10",
                 "p-2",
                 "bg-neutral-800",
-                "border-b-1",
+                "border-b",
             )}
         >
             <div className="text-neutral-300 font-bold">{title}</div>
@@ -46,8 +46,8 @@ const Modal = ({ title, children, show, onClose }: ModalProps) => {
                 "z-50",
                 "justify-center",
                 "items-center",
-                "w-[100vw]",
-                "h-[100vh]",
+                "w-screen",
+                "h-screen",
                 "fixed",
                 "bg-black",
                 "bg-opacity-50",
@@ -61,7 +61,7 @@ const Modal = ({ title, children, show, onClose }: ModalProps) => {
                     "w-[90vw]",
                     "h-[90vh]",
                     "bg-white",
-                    "shadow",
+                    "shadow-sm",
                 )}
             >
                 <ModalHeader title={title} onClose={onClose} />

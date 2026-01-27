@@ -95,7 +95,7 @@ const GridCell = ({
                     width: cellDim,
                     height: cellDim,
                 }}
-                className="bg-transparent block cursor-pointer text-center caret-transparent outline-none font-block"
+                className="bg-transparent block cursor-pointer text-center caret-transparent outline-hidden font-block"
             />
         </div>
     );

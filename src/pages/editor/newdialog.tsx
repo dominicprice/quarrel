@@ -77,7 +77,7 @@ const NewDialog = ({ onNewCells, onCancel }: NewDialogProps) => {
                                 <div>
                                     <input
                                         type="number"
-                                        className="w-48 p-2 bg-white border shadow"
+                                        className="w-48 p-2 bg-white border shadow-sm"
                                         value={gridSize}
                                         disabled={createMode !== "fromSize"}
                                         onChange={(e) =>
@@ -121,13 +121,13 @@ const NewDialog = ({ onNewCells, onCancel }: NewDialogProps) => {
                 <button
                     disabled={!canSubmit()}
                     onClick={() => onNewCells(generateGrid())}
-                    className="disabled:bg-red-600 bg-green-600 text-white outline-none cursor-pointer py-1 px-2"
+                    className="disabled:bg-red-600 bg-green-600 text-white outline-hidden cursor-pointer py-1 px-2"
                 >
                     Create
                 </button>
                 <button
                     onClick={onCancel}
-                    className="bg-neutral-600 text-white outline-none cursor-pointer py-1 px-2"
+                    className="bg-neutral-600 text-white outline-hidden cursor-pointer py-1 px-2"
                 >
                     Cancel
                 </button>

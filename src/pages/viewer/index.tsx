@@ -81,7 +81,7 @@ const Viewer = () => {
     };
 
     return (
-        <div className="min-h-[100vh] w-[100vw] flex flex-col content-center items-center">
+        <div className="min-h-screen w-screen flex flex-col content-center items-center">
             <ToastContainer />
             {main()}
             <div className="h-8 border-t bg-neutral-50 w-full py-1 px-2 text-sm text-right">

@@ -33,8 +33,8 @@ const AnagramSolver = () => {
                         "uppercase",
                         "text-xl",
                         "border",
-                        "border-1",
-                        "outline-none",
+                        "border",
+                        "outline-hidden",
                         "p-2",
                         {
                             "border-green-400": error === null,
