@@ -7,6 +7,7 @@ import { toPx } from "#/lib/utils";
 type GridCellProps = {
 	onCellClicked: () => void;
 	isActive: boolean;
+	clueActive: boolean;
 	cell: Cell;
 	scale: number;
 	dir: Dir;
@@ -16,6 +17,7 @@ const GridCell = ({
 	onCellClicked,
 	scale,
 	isActive,
+	clueActive,
 	cell,
 	dir,
 }: GridCellProps) => {
@@ -51,13 +53,17 @@ const GridCell = ({
 				{
 					"chevron-across": isActive && dir === Dir.Across,
 					"chevron-down": isActive && dir == Dir.Down,
+					"bg-sky-100": clueActive && !isActive,
 					"bg-neutral-800": cell.value === "",
 					"border-l-4": cell.splitLeft == Split.Space,
 					"border-t-4": cell.splitAbove == Split.Space,
 				},
 			)}
 		>
-			<div style={{ fontSize: numSize }} className="absolute top-0 left-[1px]">
+			<div
+				style={{ fontSize: numSize }}
+				className="absolute top-0      left-[1px]"
+			>
 				{cell.clueNum()}
 			</div>
 			{cell.splitLeft == Split.Hyphen && (

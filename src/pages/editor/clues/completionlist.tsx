@@ -3,51 +3,47 @@ import { forwardRef } from "react";
 import Completion from "./completion";
 
 interface CompletionListProps {
-    completions: string[] | null;
-    more?: boolean;
-    onSelect?: (completion: string) => void;
+	completions: string[] | null;
+	more?: boolean;
+	onSelect?: (completion: string) => void;
 }
 
 const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(
-    ({ completions, onSelect, more }: CompletionListProps, ref) => {
-        return (
-            <div
-                ref={ref}
-                className={classNames(
-                    "flex-col",
-                    "absolute",
-                    "right-2",
-                    "top-8",
-                    "bg-white",
-                    "shadow-sm",
-                    "border",
-                    "z-10",
-                    "max-h-48",
-                    "overflow-y-scroll",
-                    "min-w-32",
-                )}
-            >
-                {completions === null ? (
-                    <div className="italic py-1 px-2 text-neutral-600 text-xs">
-                        Loading...
-                    </div>
-                ) : completions.length > 0 ? (
-                    completions.map((word) => (
-                        <Completion
-                            key={word}
-                            word={word}
-                            onSelect={onSelect}
-                        />
-                    ))
-                ) : (
-                    <div className="italic py-1 px-2 text-neutral-600 text-xs">
-                        No completions
-                    </div>
-                )}
-                {completions !== null && more && <Completion word="..." />}
-            </div>
-        );
-    },
+	({ completions, onSelect, more }: CompletionListProps, ref) => {
+		return (
+			<div
+				ref={ref}
+				className={classNames(
+					"flex-col",
+					"absolute",
+					"right-4",
+					"-top-4",
+					"bg-white",
+					"shadow-sm",
+					"border",
+					"z-10",
+					"max-h-48",
+					"overflow-y-scroll",
+					"min-w-32",
+				)}
+			>
+				{completions === null ? (
+					<div className="italic py-1 px-2 text-neutral-600 text-xs">
+						Loading...
+					</div>
+				) : completions.length > 0 ? (
+					completions.map((word) => (
+						<Completion key={word} word={word} onSelect={onSelect} />
+					))
+				) : (
+					<div className="italic py-1 px-2 text-neutral-600 text-xs">
+						No completions
+					</div>
+				)}
+				{completions !== null && more && <Completion word="..." />}
+			</div>
+		);
+	},
 );
 
 export default CompletionList;

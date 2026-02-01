@@ -10,165 +10,168 @@ const allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?";
 const arrowKeys = ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"];
 
 type GridProps = {
-    cells: Cells;
-    scale?: number;
-    disabled?: boolean;
-    onCellChanged: (pos: Position, value: string) => void;
-    onCellSplit: (pos: Position, dir: Dir, split: Split) => void;
+	cells: Cells;
+	activeClueCells: Position[];
+	scale?: number;
+	disabled?: boolean;
+	onCellChanged: (pos: Position, value: string) => void;
+	onCellSplit: (pos: Position, dir: Dir, split: Split) => void;
 };
 
 const Grid = ({
-    cells,
-    disabled,
-    scale,
-    onCellChanged,
-    onCellSplit,
+	cells,
+	activeClueCells,
+	disabled,
+	scale,
+	onCellChanged,
+	onCellSplit,
 }: GridProps) => {
-    const [moveDir, setMoveDir] = useState(Dir.Across);
-    const [activeCell, setActiveCell] = useState(
-        disabled ? null : ([0, 0] as Position),
-    );
+	const [moveDir, setMoveDir] = useState(Dir.Across);
+	const [activeCell, setActiveCell] = useState(
+		disabled ? null : ([0, 0] as Position),
+	);
 
-    const move = (delta: number, dir: Dir | null = null) => {
-        if (activeCell == null) return;
+	const move = (delta: number, dir: Dir | null = null) => {
+		if (activeCell == null) return;
 
-        if (dir === null) dir = moveDir;
+		if (dir === null) dir = moveDir;
 
-        let [row, col] = activeCell;
-        const gridSize = cells.size();
-        switch (dir) {
-            case Dir.Across:
-                col = clamp(col + delta, 0, gridSize - 1);
-                break;
-            case Dir.Down:
-                row = clamp(row + delta, 0, gridSize - 1);
-                break;
-        }
+		let [row, col] = activeCell;
+		const gridSize = cells.size();
+		switch (dir) {
+			case Dir.Across:
+				col = clamp(col + delta, 0, gridSize - 1);
+				break;
+			case Dir.Down:
+				row = clamp(row + delta, 0, gridSize - 1);
+				break;
+		}
 
-        setActiveCell([row, col]);
-    };
+		setActiveCell([row, col]);
+	};
 
-    const onBackspace = () => {
-        if (activeCell == null) return;
+	const onBackspace = () => {
+		if (activeCell == null) return;
 
-        const v = cells.at(activeCell);
-        if (v.value === "") {
-            move(-1);
-        } else if (v.value === "?") {
-            const w = cells.at([
-                cells.size() - activeCell[0] - 1,
-                cells.size() - activeCell[1] - 1,
-            ]);
-            if (w.isEmpty()) {
-                onCellChanged(activeCell, "");
-            } else {
-                move(-1);
-            }
-        } else {
-            onCellChanged(activeCell, "");
-        }
-    };
+		const v = cells.at(activeCell);
+		if (v.value === "") {
+			move(-1);
+		} else if (v.value === "?") {
+			const w = cells.at([
+				cells.size() - activeCell[0] - 1,
+				cells.size() - activeCell[1] - 1,
+			]);
+			if (w.isEmpty()) {
+				onCellChanged(activeCell, "");
+			} else {
+				move(-1);
+			}
+		} else {
+			onCellChanged(activeCell, "");
+		}
+	};
 
-    const onLetter = (value: string) => {
-        if (activeCell == null) return;
+	const onLetter = (value: string) => {
+		if (activeCell == null) return;
 
-        move(1);
-        onCellChanged(activeCell, value);
-    };
+		move(1);
+		onCellChanged(activeCell, value);
+	};
 
-    const onArrowKey = (code: string) => {
-        if (activeCell == null) return;
+	const onArrowKey = (code: string) => {
+		if (activeCell == null) return;
 
-        switch (code) {
-            case "ArrowUp":
-            case "KeyK":
-                move(-1, Dir.Down);
-                break;
-            case "ArrowRight":
-            case "KeyL":
-                move(1, Dir.Across);
-                break;
-            case "ArrowDown":
-            case "KeyJ":
-                move(1, Dir.Down);
-                break;
-            case "ArrowLeft":
-            case "KeyH":
-                move(-1, Dir.Across);
-                break;
-        }
-    };
+		switch (code) {
+			case "ArrowUp":
+			case "KeyK":
+				move(-1, Dir.Down);
+				break;
+			case "ArrowRight":
+			case "KeyL":
+				move(1, Dir.Across);
+				break;
+			case "ArrowDown":
+			case "KeyJ":
+				move(1, Dir.Down);
+				break;
+			case "ArrowLeft":
+			case "KeyH":
+				move(-1, Dir.Across);
+				break;
+		}
+	};
 
-    const onTab = () => {
-        setMoveDir(moveDir == Dir.Across ? Dir.Down : Dir.Across);
-    };
+	const onTab = () => {
+		setMoveDir(moveDir == Dir.Across ? Dir.Down : Dir.Across);
+	};
 
-    const onSpacebar = () => {
-        if (activeCell == null) return;
+	const onSpacebar = () => {
+		if (activeCell == null) return;
 
-        onCellSplit(activeCell, moveDir, Split.Space);
-    };
+		onCellSplit(activeCell, moveDir, Split.Space);
+	};
 
-    const onHyphen = () => {
-        if (activeCell == null) return;
-        onCellSplit(activeCell, moveDir, Split.Hyphen);
-    };
+	const onHyphen = () => {
+		if (activeCell == null) return;
+		onCellSplit(activeCell, moveDir, Split.Hyphen);
+	};
 
-    const onKeyDown = (evt: React.KeyboardEvent<HTMLDivElement>) => {
-        if (activeCell == null) return;
+	const onKeyDown = (evt: React.KeyboardEvent<HTMLDivElement>) => {
+		if (activeCell == null) return;
 
-        let handled = true;
-        if (evt.code === "Backspace") onBackspace();
-        else if (
-            arrowKeys.indexOf(evt.code) >= 0 ||
-            (evt.ctrlKey && "hjkl".indexOf(evt.key) >= 0)
-        )
-            onArrowKey(evt.code);
-        else if (evt.code === "Tab") onTab();
-        else if (evt.code === "Space") onSpacebar();
-        else if (evt.key === "-") onHyphen();
-        else if (allowedChars.indexOf(evt.key.toUpperCase()) >= 0)
-            onLetter(evt.key.toUpperCase());
-        else handled = false;
+		let handled = true;
+		if (evt.code === "Backspace") onBackspace();
+		else if (
+			arrowKeys.indexOf(evt.code) >= 0 ||
+			(evt.ctrlKey && "hjkl".indexOf(evt.key) >= 0)
+		)
+			onArrowKey(evt.code);
+		else if (evt.code === "Tab") onTab();
+		else if (evt.code === "Space") onSpacebar();
+		else if (evt.key === "-") onHyphen();
+		else if (allowedChars.indexOf(evt.key.toUpperCase()) >= 0)
+			onLetter(evt.key.toUpperCase());
+		else handled = false;
 
-        if (handled) {
-            evt.stopPropagation();
-            evt.preventDefault();
-        }
-    };
+		if (handled) {
+			evt.stopPropagation();
+			evt.preventDefault();
+		}
+	};
 
-    const onCellClicked = (row: number, col: number) => {
-        if (activeCell == null) return;
+	const onCellClicked = (row: number, col: number) => {
+		if (activeCell == null) return;
 
-        if (row === activeCell[0] && col === activeCell[1]) {
-            setMoveDir(moveDir === Dir.Across ? Dir.Down : Dir.Across);
-        } else {
-            setActiveCell([row, col]);
-        }
-    };
+		if (row === activeCell[0] && col === activeCell[1]) {
+			setMoveDir(moveDir === Dir.Across ? Dir.Down : Dir.Across);
+		} else {
+			setActiveCell([row, col]);
+		}
+	};
 
-    return (
-        <div
-            tabIndex={0}
-            onKeyDown={onKeyDown}
-            className="flex flex-col bg-white border-black border-r border-b"
-        >
-            {cells.cells.map((row, idx) => (
-                <GridRow
-                    scale={scale ?? 1}
-                    key={idx}
-                    cells={row}
-                    onCellClicked={(col) => onCellClicked(idx, col)}
-                    dir={moveDir}
-                    activeCol={
-                        activeCell && activeCell[0] == idx
-                            ? activeCell[1]
-                            : undefined
-                    }
-                />
-            ))}
-        </div>
-    );
+	return (
+		<div
+			tabIndex={0}
+			onKeyDown={onKeyDown}
+			className="flex flex-col bg-white border-black border-r border-b"
+		>
+			{cells.cells.map((row, idx) => (
+				<GridRow
+					scale={scale ?? 1}
+					key={idx}
+					cells={row}
+					activeClueCols={activeClueCells
+						.filter((c) => c[0] == idx)
+						.map((c) => c[1])}
+					onCellClicked={(col) => onCellClicked(idx, col)}
+					dir={moveDir}
+					activeCol={
+						activeCell && activeCell[0] == idx ? activeCell[1] : undefined
+					}
+				/>
+			))}
+		</div>
+	);
 };
 
 export default Grid;

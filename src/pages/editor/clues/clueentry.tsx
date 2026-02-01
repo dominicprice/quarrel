@@ -5,12 +5,16 @@ import Suggester from "./suggester";
 interface ClueEntryProps {
 	clue: Clue;
 	onClueChanged: (value: string) => void;
+	onClueFocused: () => void;
+	onClueUnfocused: () => void;
 	onAnswerChanged: (value: string) => void;
 }
 
 const ClueEntry = ({
 	clue,
 	onClueChanged,
+	onClueFocused,
+	onClueUnfocused,
 	onAnswerChanged,
 }: ClueEntryProps) => {
 	return (
@@ -20,6 +24,8 @@ const ClueEntry = ({
 				<textarea
 					value={clue.clue}
 					onInput={(e) => onClueChanged(e.currentTarget.value)}
+					onFocus={onClueFocused}
+					onBlur={onClueUnfocused}
 					placeholder={clue.answer}
 				></textarea>
 			</div>

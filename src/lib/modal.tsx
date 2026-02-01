@@ -1,74 +1,91 @@
 import classNames from "classnames";
+import { useEffect } from "react";
 
 interface ModalHeaderProps {
-    title: string;
-    onClose: () => void;
+	title: string;
+	onClose: () => void;
 }
 
 const ModalHeader = ({ title, onClose }: ModalHeaderProps) => {
-    return (
-        <div
-            className={classNames(
-                "flex",
-                "content-between",
-                "h-10",
-                "p-2",
-                "bg-neutral-800",
-                "border-b",
-            )}
-        >
-            <div className="text-neutral-300 font-bold">{title}</div>
-            <div className="ml-auto order-2">
-                <button
-                    className="text-white font-bold text-xl leading-3"
-                    onClick={onClose}
-                >
-                    <img src="/assets/cross.svg" className="w-6 h-6 invert" />
-                </button>
-            </div>
-        </div>
-    );
+	return (
+		<div
+			className={classNames(
+				"flex",
+				"content-between",
+				"h-10",
+				"p-2",
+				"bg-neutral-800",
+				"rounded-t-lg",
+			)}
+		>
+			<div className="text-neutral-300 font-bold">{title}</div>
+			<div className="ml-auto order-2">
+				<button
+					className="text-white font-bold text-xl leading-3"
+					onClick={onClose}
+				>
+					<img
+						src="/assets/cross.svg"
+						className="w-6 h-6 invert cursor-pointer"
+					/>
+				</button>
+			</div>
+		</div>
+	);
 };
 
 interface ModalProps {
-    title: string;
-    children: JSX.Element;
-    show: boolean;
-    onClose: () => void;
+	title: string;
+	children: JSX.Element;
+	show: boolean;
+	onClose: () => void;
 }
 
 const Modal = ({ title, children, show, onClose }: ModalProps) => {
-    if (!show) return null;
+	useEffect(() => {
+		const bodyTags = document.getElementsByTagName("body");
+		if (bodyTags.length <= 0) return;
+		const body = bodyTags[0];
+		if (show) {
+			body.classList.add("modal-open");
+		} else {
+			body.classList.remove("modal-open");
+		}
+	}, [show]);
 
-    return (
-        <div
-            className={classNames(
-                "z-50",
-                "justify-center",
-                "items-center",
-                "w-screen",
-                "h-screen",
-                "fixed",
-                "bg-black",
-                "bg-opacity-50",
-                "flex",
-            )}
-        >
-            <div
-                className={classNames(
-                    "flex",
-                    "flex-col",
-                    "w-[90vw]",
-                    "h-[90vh]",
-                    "bg-white",
-                    "shadow-sm",
-                )}
-            >
-                <ModalHeader title={title} onClose={onClose} />
-                <div className="p-2 overflow-y-scroll flex-1">{children}</div>
-            </div>
-        </div>
-    );
+	if (!show) return null;
+
+	return (
+		<div
+			className={classNames(
+				"z-50",
+				"justify-center",
+				"items-center",
+				"w-screen",
+				"h-screen",
+				"fixed",
+				"bg-black/50",
+				"flex",
+				"backdrop-blur-xs",
+			)}
+		>
+			<div
+				className={classNames(
+					"flex",
+					"flex-col",
+					"w-[90vw]",
+					"max-h-[90vh]",
+					"lg:w-2/3",
+					"xl:w-1/2",
+				)}
+			>
+				<ModalHeader title={title} onClose={onClose} />
+				<div className="p-2 lg:p-4 bg-white rounded-b-lg overflow-y-scroll flex-1 border-2 border-neutral-800">
+					{children}
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Modal;

@@ -6,23 +6,7 @@
   --font-block: 'Archivo Black', serif;
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
-}
+@custom-variant hover (&:hover);
 
 #root {
     height: 100vh;
@@ -65,8 +49,12 @@
 .grow-wrap > textarea,
 .grow-wrap::after {
   /* Identical styling required!! */
-	@apply w-64 border p-1 font-serif text-sm;
+	@apply border border-neutral-200 rounded p-1 font-serif text-sm;
 
   /* Place on top of each other */
   grid-area: 1 / 1 / 2 / 2;
+}
+
+.modal-open {
+	overflow: hidden;
 }

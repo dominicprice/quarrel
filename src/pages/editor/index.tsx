@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocalStorage } from "usehooks-ts";
@@ -10,6 +10,7 @@ import renderTemplate, { templateFromName } from "#/lib/export/templates";
 import importPuzzle, { ImportFormat } from "#/lib/import";
 import Modal from "#/lib/modal";
 import Position from "#/lib/position";
+import { compress } from "#/lib/compression";
 import Split from "#/lib/split";
 import { getDefaultScale, uuidv4 } from "#/lib/utils";
 import Clues from "./clues";
@@ -34,7 +35,7 @@ enum ModalType {
 	WordFinder = 7,
 }
 
-const splitPoint = 1280;
+const splitPoint = 768;
 
 const Editor = () => {
 	const fileChooserInput = useRef(null as HTMLInputElement | null);
@@ -52,6 +53,28 @@ const Editor = () => {
 	});
 	const [modal, setModal] = useState(ModalType.None);
 	const [zoom, setZoom] = useState(getDefaultScale(cells.size(), splitPoint));
+
+	const [activeClueCells, setActiveClueCells] = useState<Position[]>([]);
+
+	const onClueFocused = (pos: Position, dir: Dir) => {
+		const clue = cells.clueAt(pos, dir);
+		if (!clue) {
+			setActiveClueCells([]);
+			return;
+		}
+		const len = clue.answer.replace(/ |-/g, "").length;
+		const res: Position[] = [];
+		if (dir == Dir.Across) {
+			for (let i = 0; i < len; ++i) res.push([pos[0], pos[1] + i]);
+		} else {
+			for (let i = 0; i < len; ++i) res.push([pos[0] + i, pos[1]]);
+		}
+		setActiveClueCells(res);
+	};
+
+	const onClueUnfocused = () => {
+		setActiveClueCells([]);
+	};
 
 	const onNew = () => {
 		setModal(ModalType.New);
@@ -110,33 +133,11 @@ const Editor = () => {
 				const jsonTemplate = templateFromName("JSON");
 				if (jsonTemplate === null) throw new Error("JSON template unavailable");
 				const exportData = convertExportData(title, description, cells);
-				return renderTemplate(jsonTemplate.template, exportData);
+				const jsonData = renderTemplate(jsonTemplate.template, exportData);
+				return compress(jsonData);
 			})
-			.then((body) => {
-				// Post to storage
-				return fetch("https://jsonblob.com/api/jsonBlob", {
-					method: "POST",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					body: body,
-				});
-			})
-			.then((resp) => {
-				// Get storage ID
-				if (!resp.ok) {
-					throw new Error("failed to upload json blob");
-				}
-				const location = resp.headers.get("Location");
-				if (!location) throw new Error("no location returned");
-				const pathSegments = location.split("/");
-				const blobId = pathSegments.pop() || pathSegments.pop();
-				if (!blobId) throw new Error("failed to resolve blob id");
-				return blobId;
-			})
-			.then((blobId) => {
-				const url = "/view?blobid=" + blobId;
+			.then((base64Data) => {
+				const url = "/view?data=" + encodeURIComponent(base64Data);
 				toast.update(toastId, {
 					render: () => (
 						<>
@@ -220,6 +221,12 @@ const Editor = () => {
 		localStorage.setItem("description", description);
 	};
 
+	useEffect(() => {
+		window.addEventListener("resize", () => {
+			setZoom(getDefaultScale(cells.size(), splitPoint));
+		});
+	}, []);
+
 	return (
 		<>
 			<ToastContainer />
@@ -247,7 +254,6 @@ const Editor = () => {
 						onReset(cells);
 						setModal(ModalType.None);
 					}}
-					onCancel={() => setModal(ModalType.None)}
 				/>
 			</Modal>
 			<Modal
@@ -300,8 +306,11 @@ const Editor = () => {
 					onHelpGuide={() => setModal(ModalType.HelpGuide)}
 					onHelpAbout={() => setModal(ModalType.HelpAbout)}
 					onHelpBug={() => {
-						window.location.href =
-							"https://github.com/dominicprice/quarrel/issues";
+						const page = window.open(
+							"https://github.com/dominicprice/quarrel/issues",
+							"_blank",
+						);
+						if (page) page.focus();
 					}}
 				></MenuBar>
 				<div className="flex flex-col gap-4 p-4 items-center">
@@ -311,7 +320,7 @@ const Editor = () => {
 						onInput={(e: ChangeEvent<HTMLInputElement>) =>
 							updateTitle(e.target.value)
 						}
-						className="w-full md:w-[50vw] border-b text-xl text-center font-serif"
+						className="w-full md:w-[50vw] border-b border-neutral-200 text-xl text-center font-serif"
 					/>
 					<textarea
 						value={description}
@@ -319,22 +328,27 @@ const Editor = () => {
 							updateDescription(e.target.value)
 						}
 						placeholder="Crossword Description"
-						className="w-full md:w-[50vw] border text-sm p-2 font-serif resize-none"
+						className="w-full md:w-[50vw] border border-neutral-200 rounded text-sm p-2 font-serif resize-none"
 					></textarea>
 				</div>
-				<div className="flex flex-1 flex-col xl:flex-row mx-4 justify-between gap-4">
-					<div className="flex flex-1 flex-row justify-center items-center">
-						<Grid
-							cells={cells}
-							scale={zoom}
-							onCellSplit={onCellSplit}
-							onCellChanged={onCellChanged}
-						/>
+				<div className="flex flex-1 flex-col md:flex-row mx-4 justify-between gap-4">
+					<div className="flex flex-1 flex-row justify-center">
+						<div>
+							<Grid
+								cells={cells}
+								scale={zoom}
+								onCellSplit={onCellSplit}
+								onCellChanged={onCellChanged}
+								activeClueCells={activeClueCells}
+							/>
+						</div>
 					</div>
 					<div className="flex flex-2 xl:max-w-2/3 m-2 flex-row justify-center items-start w-full">
 						<Clues
 							cells={cells}
 							onAnswerChanged={onAnswerChanged}
+							onClueFocused={onClueFocused}
+							onClueUnfocused={onClueUnfocused}
 							onClueChanged={onClueChanged}
 						/>
 					</div>

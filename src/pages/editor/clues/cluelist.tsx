@@ -7,6 +7,8 @@ interface ClueListProps {
 	cells: [Cell, Position][];
 	dir: Dir;
 	onClueChanged: (pos: Position, dir: Dir, value: string) => void;
+	onClueFocused: (pos: Position, dir: Dir) => void;
+	onClueUnfocused: () => void;
 	onAnswerChanged: (pos: Position, dir: Dir, value: string) => void;
 }
 
@@ -14,6 +16,8 @@ const ClueList = ({
 	cells,
 	dir,
 	onClueChanged,
+	onClueFocused,
+	onClueUnfocused,
 	onAnswerChanged,
 }: ClueListProps) => {
 	if (cells.length == 0) {
@@ -24,7 +28,7 @@ const ClueList = ({
 		);
 	}
 	return (
-		<div className="max-h-[70dvh] overflow-scroll">
+		<div className="overflow-scroll">
 			{cells.map(([cell, pos]) => {
 				const clue = dir == Dir.Across ? cell.acrossClue! : cell.downClue!;
 				return (
@@ -32,6 +36,8 @@ const ClueList = ({
 						key={clue.num}
 						clue={clue}
 						onClueChanged={(v) => onClueChanged(pos, dir, v)}
+						onClueFocused={() => onClueFocused(pos, dir)}
+						onClueUnfocused={onClueUnfocused}
 						onAnswerChanged={(v) => onAnswerChanged(pos, dir, v)}
 					/>
 				);
