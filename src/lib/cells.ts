@@ -33,7 +33,32 @@ class Cells {
 	};
 
 	at = (pos: Position) => {
+		if (pos[0] < 0 || pos[0] >= this.size()) return null;
+		if (pos[1] < 0 || pos[1] >= this.size()) return null;
 		return this.cells[pos[0]][pos[1]];
+	};
+
+	getPreferredDirection = ([row, col]: Position) => {
+		const cellLeft = this.at([row, col - 1]);
+		const cellRight = this.at([row, col + 1]);
+		const cellUp = this.at([row - 1, col]);
+		const cellDown = this.at([row + 1, col]);
+
+		const hasCellLeft = cellLeft !== null && !cellLeft.isBlank();
+		const hasCellRight = cellRight !== null && !cellRight.isBlank();
+		const hasCellUp = cellUp !== null && !cellUp.isBlank();
+		const hasCellDown = cellDown !== null && !cellDown.isBlank();
+
+		const hasCellsAcross = hasCellLeft || hasCellRight;
+		const hasCellsDown = hasCellUp || hasCellDown;
+
+		if (hasCellsAcross) {
+			if (hasCellsDown) return null;
+			return Dir.Across;
+		} else if (hasCellsDown) {
+			return Dir.Down;
+		}
+		return null;
 	};
 
 	clueAt = (pos: Position, dir: Dir) => {
@@ -67,6 +92,7 @@ class Cells {
 
 	toggleSplit = (pos: Position, dir: Dir, split: Split) => {
 		const cell = this.at(pos);
+		if (cell === null) return;
 		if (cell.value === "") this.setValue(pos, "?");
 		if (dir === Dir.Across) {
 			if (pos[1] > 0)
@@ -81,6 +107,7 @@ class Cells {
 
 	setSplit = (pos: Position, dir: Dir, split: Split) => {
 		const cell = this.at(pos);
+		if (cell === null) return;
 		if (cell.value === "") this.setValue(pos, "?");
 		if (dir === Dir.Across) {
 			if (pos[1] > 0) cell.splitLeft = split;
@@ -101,6 +128,7 @@ class Cells {
 
 	private recalculateClue = (pos: Position, clueNum: number) => {
 		const cell = this.at(pos);
+		if (cell === null) return;
 		const dirs = this.startsClue(pos);
 		if (dirs.indexOf(Dir.Across) >= 0) {
 			if (cell.acrossClue === null) cell.acrossClue = new Clue(clueNum);
@@ -147,7 +175,7 @@ class Cells {
 		let answer = "";
 		let [row, col] = pos;
 		while (row < this.size() && col < this.size()) {
-			const cell = this.at([row, col]);
+			const cell = this.at([row, col])!;
 			if (cell.value === "") break;
 			answer += splitToString(
 				dir === Dir.Across ? cell.splitLeft : cell.splitAbove,
@@ -181,7 +209,7 @@ class Cells {
 		for (let i = 0; i < this.size(); ++i) {
 			for (let j = 0; j < this.size(); ++j) {
 				const pos: Position = [i, j];
-				allCells.push([this.at(pos), pos]);
+				allCells.push([this.at(pos)!, pos]);
 			}
 		}
 		return allCells;

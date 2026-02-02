@@ -25,7 +25,7 @@ const GridCell = ({
 	const baseLetterSize = baseCellSize * 0.6;
 
 	const cellDim = toPx(baseCellSize, scale);
-	const numSize = toPx(baseLetterSize * 0.5, scale);
+	const numSize = toPx(baseLetterSize * 0.4, scale);
 	const letterSize = toPx(baseLetterSize, scale);
 	const hyphenSize = toPx(baseCellSize * 0.25, scale);
 	const hyphenOffsetY = toPx(baseCellSize * 0.5, scale);
@@ -51,8 +51,8 @@ const GridCell = ({
 				"relative",
 				"select-none",
 				{
-					"chevron-across": isActive && dir === Dir.Across,
-					"chevron-down": isActive && dir == Dir.Down,
+					"active-cell-across": isActive && dir === Dir.Across,
+					"active-cell-down": isActive && dir == Dir.Down,
 					"bg-sky-100": clueActive && !isActive,
 					"bg-neutral-800": cell.value === "",
 					"border-l-4": cell.splitLeft == Split.Space,

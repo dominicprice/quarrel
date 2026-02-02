@@ -64,6 +64,7 @@ const Export = ({ title, description, cells }: ExportProps) => {
 						<Select
 							onChange={onBuiltinSelected}
 							className="border-none bg-neutral-100 p-1 text-xs shadow-none"
+							chevronSize={16}
 						>
 							<option disabled>Select template</option>
 							{builtinTemplates.map((tpl) => (
@@ -104,6 +105,7 @@ const Export = ({ title, description, cells }: ExportProps) => {
 							onChange={(e) => setFilename(e.target.value)}
 						/>
 					</div>
+					<div className="flex-1"></div>
 					<button
 						className={classNames(
 							"w-8 h-8 cursor-pointer material-symbols-outlined rounded-lg hover:bg-neutral-300",

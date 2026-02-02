@@ -14,13 +14,13 @@ enum SuggestMode {
 function modeIndicator(mode: SuggestMode): [string, string] {
 	switch (mode) {
 		case SuggestMode.Unknown:
-			return ["/assets/questionmark.svg", "hidden"];
+			return ["question_mark", "hidden"];
 		case SuggestMode.Incomplete:
-			return ["/assets/search.svg", "bg-blue-600"];
+			return ["search", "bg-blue-600"];
 		case SuggestMode.Correct:
-			return ["/assets/tick.svg", "bg-green-600"];
+			return ["check", "bg-green-600"];
 		case SuggestMode.Incorrect:
-			return ["/assets/cross.svg", "bg-red-600"];
+			return ["close", "bg-red-600"];
 	}
 }
 
@@ -91,7 +91,12 @@ const Suggester = ({ pattern, onSelect }: SuggesterProps) => {
 				)}
 				onClick={() => setShow(!show)}
 			>
-				<img src={value} className="invert w-3 h-3" />
+				<div
+					className="material-symbols-outlined text-white"
+					style={{ fontSize: 10 }}
+				>
+					{value}
+				</div>
 			</button>
 			{show && (
 				<CompletionList

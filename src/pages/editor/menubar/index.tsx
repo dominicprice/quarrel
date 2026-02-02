@@ -35,10 +35,13 @@ const MenuBar = memo(
 			<div
 				className={classNames(
 					"w-full",
-					"bg-neutral-800",
 					"text-white",
 					"flex",
 					"flex-row",
+					"h-8",
+					"bg-linear-to-br",
+					"from-neutral-800",
+					"to-neutral-700",
 				)}
 			>
 				<MenuItem level={0} label="File">

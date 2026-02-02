@@ -35,28 +35,27 @@ const AnagramSolver = () => {
 						"uppercase",
 						"text-xl",
 						"border",
-						"border",
+						"shadow",
+						"rounded",
 						"outline-hidden",
 						"p-2",
 						{
-							"border-green-400": error === null,
+							"border-neutral-200": error === null,
 							"border-red-400": error !== null,
 						},
 					)}
 				/>
 				<div className="text text-xs text-red-400 h-8">{error}</div>
 			</div>
-			<div className="bg-neutral-200 rounded p-4">
-				{solutions !== null && solutions.length > 0 ? (
-					<ul className="flex flex-row gap-8 flex-wrap justify-center">
-						{solutions.map((s) => (
-							<li key={s}>{s}</li>
-						))}
-					</ul>
-				) : (
-					<div className="italic">No solutions found</div>
-				)}
-			</div>
+			{solutions !== null && solutions.length > 0 ? (
+				<ul className="flex flex-row gap-8 flex-wrap justify-center">
+					{solutions.map((s) => (
+						<li key={s}>{s}</li>
+					))}
+				</ul>
+			) : (
+				<div className="text-neutral-400">No solutions found</div>
+			)}
 		</div>
 	);
 };

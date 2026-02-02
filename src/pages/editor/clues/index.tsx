@@ -30,7 +30,7 @@ const Clues = ({
 
 	return (
 		<div className="relative w-full justify-between h-full min-h-64">
-			<div className="absolute top-0 left-0 bottom-1/2 h-1/2 lg:bottom-0 lg:right-1/2 lg:h-full overflow-scroll pr-4">
+			<div className="absolute top-0 left-0 right-0 bottom-1/2 h-1/2 lg:bottom-0 lg:right-1/2 lg:h-full overflow-scroll pr-4">
 				<h3 className="font-bold font-serif sticky top-0 bg-white z-10 py-2">
 					Across
 				</h3>
@@ -44,7 +44,7 @@ const Clues = ({
 				/>
 			</div>
 
-			<div className="absolute top-1/2 bottom-0 right-0 h-1/2 lg:top-0 lg:left-1/2 lg:h-full overflow-scroll pr-4">
+			<div className="absolute top-1/2 bottom-0 right-0 left-0 h-1/2 lg:top-0 lg:left-1/2 lg:h-full overflow-scroll pr-4">
 				<h3 className="font-bold font-serif sticky top-0 bg-white z-10 py-2">
 					Down
 				</h3>

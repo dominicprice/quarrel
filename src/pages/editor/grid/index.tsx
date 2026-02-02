@@ -54,6 +54,7 @@ const Grid = ({
 		if (activeCell == null) return;
 
 		const v = cells.at(activeCell);
+		if (v === null) return;
 		if (v.value === "") {
 			move(-1);
 		} else if (v.value === "?") {
@@ -61,7 +62,7 @@ const Grid = ({
 				cells.size() - activeCell[0] - 1,
 				cells.size() - activeCell[1] - 1,
 			]);
-			if (w.isEmpty()) {
+			if (w !== null && w.isEmpty()) {
 				onCellChanged(activeCell, "");
 			} else {
 				move(-1);
@@ -146,6 +147,10 @@ const Grid = ({
 			setMoveDir(moveDir === Dir.Across ? Dir.Down : Dir.Across);
 		} else {
 			setActiveCell([row, col]);
+			const preferredDir = cells.getPreferredDirection([row, col]);
+			if (preferredDir !== null) {
+				setMoveDir(preferredDir);
+			}
 		}
 	};
 

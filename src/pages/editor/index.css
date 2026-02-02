@@ -1,60 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300..800&family=Merriweather:opsz@18..144&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=check,close,content_copy,download,keyboard_arrow_down,keyboard_arrow_right,question_mark,search,shuffle&display=block');
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: ABeeZee, sans-serif;
-  --font-serif: Merriweather, serif;
-  --font-block: 'Archivo Black', serif;
+	--font-sans: "Merriweather Sans", sans-serif;
+	--font-serif: Merriweather, serif;
 }
 
 @custom-variant hover (&:hover);
 
-#root {
-    height: 100vh;
-    width: 100vw;
+@layer base {
+	#root {
+		@apply h-screen w-screen;
+	}
 }
 
-.chevron-across {
-    background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+Cjxzdmcgd2lkdGg9IjE3IiBoZWlnaHQ9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogPGcgY2xhc3M9ImxheWVyIj4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPHBvbHlnb24gaWQ9InN2Z18xIiBwb2ludHM9IjcuMjkzIDQuNzA3IDE0LjU4NiAxMiA3LjI5MyAxOS4yOTMgOC43MDcgMjAuNzA3IDE3LjQxNCAxMiA4LjcwNyAzLjI5MyA3LjI5MyA0LjcwNyIvPgogPC9nPgo8L3N2Zz4=") right center no-repeat;
-    background-color: rgb(228, 224, 127, 0.5);
-    background-blend-mode: lighten;
-}
+@layer utilities {
+	/* Styling of grid cell with cursor inside going across */
+	.active-cell-across {
+		background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+Cjxzdmcgd2lkdGg9IjE3IiBoZWlnaHQ9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogPGcgY2xhc3M9ImxheWVyIj4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPHBvbHlnb24gaWQ9InN2Z18xIiBwb2ludHM9IjcuMjkzIDQuNzA3IDE0LjU4NiAxMiA3LjI5MyAxOS4yOTMgOC43MDcgMjAuNzA3IDE3LjQxNCAxMiA4LjcwNyAzLjI5MyA3LjI5MyA0LjcwNyIvPgogPC9nPgo8L3N2Zz4=") right center no-repeat;
+		background-color: rgb(228, 224, 127, 0.5);
+		background-blend-mode: lighten;
+	}
 
-.chevron-down {
-    background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+Cjxzdmcgd2lkdGg9IjI0IiBoZWlnaHQ9IjE3IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogPGcgY2xhc3M9ImxheWVyIj4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPHBvbHlnb24gaWQ9InN2Z18xIiBwb2ludHM9IjEyIDE3LjQxNCAzLjI5MyA4LjcwNyA0LjcwNyA3LjI5MyAxMiAxNC41ODYgMTkuMjkzIDcuMjkzIDIwLjcwNyA4LjcwNyAxMiAxNy40MTQiLz4KIDwvZz4KPC9zdmc+") center bottom no-repeat;
-    background-color: rgb(228, 224, 127, 0.5);
-    background-blend-mode: lighten;
-}
+	/* Styling of grid cell with cursor inside going down */
+	.active-cell-down {
+		background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+Cjxzdmcgd2lkdGg9IjI0IiBoZWlnaHQ9IjE3IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogPGcgY2xhc3M9ImxheWVyIj4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPHBvbHlnb24gaWQ9InN2Z18xIiBwb2ludHM9IjEyIDE3LjQxNCAzLjI5MyA4LjcwNyA0LjcwNyA3LjI5MyAxMiAxNC41ODYgMTkuMjkzIDcuMjkzIDIwLjcwNyA4LjcwNyAxMiAxNy40MTQiLz4KIDwvZz4KPC9zdmc+") center bottom no-repeat;
+		background-color: rgb(228, 224, 127, 0.5);
+		background-blend-mode: lighten;
+	}
 
-.grow-wrap {
-  /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
-  display: grid;
-}
-.grow-wrap::after {
-  /* Note the weird space! Needed to preventy jumpy behavior */
-  content: attr(data-replicated-value) " ";
+	/*
+	grow-wrap is applied to a div with a textarea as a direct child,
+	allowing the textarea to grow and shrink depending on the size of
+	the content
+	*/
+	.grow-wrap {
+		display: grid;
+	}
+	.grow-wrap::after {
+		content: attr(data-replicated-value) " ";
+		white-space: pre-wrap;
+		visibility: hidden;
+	}
+	.grow-wrap > textarea {
+		resize: none;
+		overflow: hidden;
+	}
+	.grow-wrap > textarea, .grow-wrap::after {
+		@apply w-64 border border-neutral-200 rounded p-1 font-serif text-sm;
+		grid-area: 1 / 1 / 2 / 2;
+	}
 
-  /* This is how textarea text behaves */
-  white-space: pre-wrap;
-
-  /* Hidden from view, clicks, and screen readers */
-  visibility: hidden;
-}
-.grow-wrap > textarea {
-  /* You could leave this, but after a user resizes, then it ruins the auto sizing */
-  resize: none;
-
-  /* Firefox shows scrollbar on growth, you can hide like this. */
-  overflow: hidden;
-}
-.grow-wrap > textarea,
-.grow-wrap::after {
-  /* Identical styling required!! */
-	@apply w-64 border border-neutral-200 rounded p-1 font-serif text-sm;
-
-  /* Place on top of each other */
-  grid-area: 1 / 1 / 2 / 2;
-}
-
-.modal-open {
-	overflow: hidden;
+	/* when applied to body, makes page unscrollable when modal is open */
+	.modal-open {
+		overflow: hidden;
+	}
 }

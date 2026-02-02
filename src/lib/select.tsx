@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useId } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface SelectProps {
@@ -7,6 +7,7 @@ interface SelectProps {
 	value?: string;
 	children?: ReactNode | ReactNode[];
 	className?: string;
+	chevronSize?: number;
 }
 
 const Select = ({
@@ -15,7 +16,9 @@ const Select = ({
 	value,
 	children,
 	className,
+	chevronSize,
 }: SelectProps) => {
+	const id = useId();
 	return (
 		<div
 			className={twMerge(
@@ -25,14 +28,21 @@ const Select = ({
 		>
 			<select
 				onChange={(e) => onChange && onChange(e.target.value)}
-				className="cursor-[inherit]"
+				className="cursor-[inherit] w-full"
 				disabled={disabled}
 				value={value}
 				style={{ WebkitAppearance: "none" }}
+				id={id}
 			>
 				{children}
 			</select>
-			<img src="/assets/chevron-down.svg" className="w-4 h-4" />
+			<label
+				htmlFor={id}
+				className="material-symbols-outlined w-4 h-4 cursor-pointer"
+				style={{ fontSize: chevronSize || 20 }}
+			>
+				keyboard_arrow_down
+			</label>
 		</div>
 	);
 };

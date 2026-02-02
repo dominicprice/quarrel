@@ -140,13 +140,13 @@ const Editor = () => {
 				const url = "/view?data=" + encodeURIComponent(base64Data);
 				toast.update(toastId, {
 					render: () => (
-						<>
+						<div>
 							Generated crossword, click{" "}
 							<a className="text-sky-600 underline" href={url}>
 								here
 							</a>{" "}
 							to view
-						</>
+						</div>
 					),
 					type: "success",
 					isLoading: false,
@@ -221,10 +221,15 @@ const Editor = () => {
 		localStorage.setItem("description", description);
 	};
 
+	const onResize = () => {
+		setZoom(getDefaultScale(cells.size(), splitPoint));
+	};
+
 	useEffect(() => {
-		window.addEventListener("resize", () => {
-			setZoom(getDefaultScale(cells.size(), splitPoint));
-		});
+		window.addEventListener("resize", onResize);
+		return () => {
+			window.removeEventListener("resize", onResize);
+		};
 	}, []);
 
 	return (
