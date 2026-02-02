@@ -1,7 +1,7 @@
 {{:size}}
-{{:title}}
-{{:description}}
-{{for cells}}{{for}}{{:letter || '.'}}{{/for}}{{/for}}
-{{for acrossClues}}{{:clue}}
-{{/for}}{{for downClues}}{{:clue}}
+{{url:title}}
+{{url:description}}
+{{for cells}}{{for}}{{if splitLeft == ' '}}<{{else splitLeft == '-'}}-{{/if}}{{if splitAbove == ' '}}^{{else splitAbove == '-'}}|{{/if}}{{:letter || '.'}}{{/for}}{{/for}}
+{{for acrossClues}}{{url:clue}}
+{{/for}}{{for downClues}}{{url:clue}}
 {{/for}}

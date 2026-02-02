@@ -20,11 +20,8 @@ function getDefaultScale(gridSize: number, splitPoint: number): number {
 
 	// couldn't work out width or height, just return 1
 	if (vw === 0) {
-		console.log("failed to calculate width or height");
 		return 1;
 	}
-
-	console.log("vw=", vw, "vh=", vh);
 
 	const maxWidthProportion = 0.4;
 	const maxFillPercentage = 0.9;
@@ -34,21 +31,12 @@ function getDefaultScale(gridSize: number, splitPoint: number): number {
 		// flex-col mode
 		const maxWidth = vw * maxFillPercentage;
 		maxScale = maxWidth / (40 * gridSize);
-		console.log("col mode --- maxWidth=", maxWidth, "maxScale=", maxScale);
 	} else {
 		const maxWidth = vw * maxFillPercentage * maxWidthProportion;
 		const maxHeight = vh * maxFillPercentage;
 		maxScale = Math.min(
 			maxWidth / (40 * gridSize),
 			maxHeight / (40 * gridSize),
-		);
-		console.log(
-			"row mode --- maxWidth=",
-			maxWidth,
-			"maxHeight=",
-			maxHeight,
-			"maxScale=",
-			maxScale,
 		);
 	}
 

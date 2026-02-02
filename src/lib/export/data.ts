@@ -1,4 +1,5 @@
 import Cells from "#/lib/cells";
+import { splitToString } from "#/lib/split";
 
 interface ExportClue {
 	num: number;
@@ -12,6 +13,8 @@ interface ExportClue {
 interface ExportCell {
 	num: number | null;
 	letter: string | null;
+	splitAbove: string | null;
+	splitLeft: string | null;
 }
 
 interface ExportData {
@@ -44,6 +47,8 @@ function convertExportData(
 			data.cells[data.cells.length - 1].push({
 				num: cell.clueNum(),
 				letter: cell.value || null,
+				splitLeft: splitToString(cell.splitLeft),
+				splitAbove: splitToString(cell.splitAbove),
 			});
 			const { acrossClue: across, downClue: down } = cell;
 			if (across !== null) {

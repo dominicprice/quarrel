@@ -1,6 +1,6 @@
 {
-  "title": "{{:title}}",
-  "description": "{{:description}}",
+  "title": {{json:title}},
+  "description": {{json:description}},
   "size": {{:size}},
   "grid": [{{for cells end=-1}}
     ["{{for}}{{:letter || ' '}}{{/for}}"],{{/for}}
@@ -11,15 +11,15 @@
       "num": {{:num}},
       "row": {{:row}},
       "col": {{:col}},
-      "clue": "{{:clue}}",
-      "answer": "{{:answer}}"
+      "clue": {{json:clue}},
+      "answer": {{json:answer}}
     },{{/for}}{{for acrossClues start=-1}}
     {
       "num": {{:num}},
       "row": {{:row}},
       "col": {{:col}},
-      "clue": "{{:clue}}",
-      "answer": "{{:answer}}"
+      "clue": {{json:clue}},
+      "answer": {{json:answer}}
     }{{/for}}
   ],
   "downClues": [{{for downClues end=-1}}
@@ -27,15 +27,15 @@
       "num": {{:num}},
       "row": {{:row}},
       "col": {{:col}},
-      "clue": "{{:clue}}",
-      "answer": "{{:answer}}"
+      "clue": {{json:clue}},
+      "answer": {{json:answer}}
     },{{/for}}{{for downClues start=-1}}
     {
       "num": {{:num}},
       "row": {{:row}},
       "col": {{:col}},
-      "clue": "{{:clue}}",
-      "answer": "{{:answer}}"
+      "clue": {{json:clue}},
+      "answer": {{json:answer}}
     }{{/for}}
   ]
 }

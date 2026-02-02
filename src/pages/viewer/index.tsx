@@ -41,8 +41,8 @@ const Viewer = () => {
 				}
 				return decompress(decodeURIComponent(base64Data));
 			})
-			.then((jsonData) => {
-				const puzzle = importPuzzle("json", jsonData);
+			.then((data) => {
+				const puzzle = importPuzzle("pcn", data);
 				setState({
 					state: "ready",
 					puzzle: puzzle,

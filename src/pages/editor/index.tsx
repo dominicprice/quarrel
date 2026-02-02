@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocalStorage } from "usehooks-ts";
@@ -130,8 +130,8 @@ const Editor = () => {
 		Promise.resolve()
 			.then(() => {
 				// Render template
-				const jsonTemplate = templateFromName("JSON");
-				if (jsonTemplate === null) throw new Error("JSON template unavailable");
+				const jsonTemplate = templateFromName("Public Crossword Notation");
+				if (jsonTemplate === null) throw new Error("PCN template unavailable");
 				const exportData = convertExportData(title, description, cells);
 				const jsonData = renderTemplate(jsonTemplate.template, exportData);
 				return compress(jsonData);
@@ -317,16 +317,12 @@ const Editor = () => {
 					<input
 						placeholder="Crossword Title"
 						value={title}
-						onInput={(e: ChangeEvent<HTMLInputElement>) =>
-							updateTitle(e.target.value)
-						}
+						onInput={(e) => updateTitle(e.currentTarget.value)}
 						className="w-full md:w-[50vw] border-b border-neutral-200 text-xl text-center font-serif"
 					/>
 					<textarea
 						value={description}
-						onInput={(e: ChangeEvent<HTMLTextAreaElement>) =>
-							updateDescription(e.target.value)
-						}
+						onInput={(e) => updateDescription(e.currentTarget.value)}
 						placeholder="Crossword Description"
 						className="w-full md:w-[50vw] border border-neutral-200 rounded text-sm p-2 font-serif resize-none"
 					></textarea>

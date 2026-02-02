@@ -21,6 +21,9 @@ const CompletionList = forwardRef<HTMLDivElement | null, CompletionListProps>(
 					"bg-white",
 					"shadow-sm",
 					"border",
+					"border-neutral-200",
+					"rounded",
+
 					"z-10",
 					"max-h-48",
 					"overflow-y-scroll",

@@ -10,6 +10,7 @@ import pcnTemplate from "./builtins/pcn.tpl?raw";
 import { ExportData } from "./data";
 
 const renderer = jsrender();
+renderer.views.converters("json", JSON.stringify);
 
 interface Template {
 	name: string;
