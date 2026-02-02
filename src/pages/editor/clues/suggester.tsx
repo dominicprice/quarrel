@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import { checkWord, completeWord } from "#/lib/dictionary";
 import CompletionList from "./completionlist";
@@ -59,8 +59,8 @@ const Suggester = ({ pattern, onSelect }: SuggesterProps) => {
 		}
 	}, [show]);
 
-	const ref = useRef(null);
-	useOnClickOutside([ref], () => setShow(false));
+	const ref = useRef<HTMLDivElement>(null);
+	useOnClickOutside([ref as RefObject<HTMLDivElement>], () => setShow(false));
 
 	const onWordSuggestered = (word: string) => {
 		setShow(false);

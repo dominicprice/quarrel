@@ -24,17 +24,18 @@ function importPcn(pcnString: string): ImportedPuzzle {
 	let col = 0;
 	for (const char of lines.shift() || "") {
 		// check for cell split character
+		const cell = cells.at([row, col])!;
 		if (char === "<") {
-			cells.at([row, col]).splitLeft = Split.Space;
+			cell.splitLeft = Split.Space;
 			continue;
 		} else if (char === "^") {
-			cells.at([row, col]).splitAbove = Split.Space;
+			cell.splitAbove = Split.Space;
 			continue;
 		} else if (char === "-") {
-			cells.at([row, col]).splitLeft = Split.Hyphen;
+			cell.splitLeft = Split.Hyphen;
 			continue;
 		} else if (char === "|") {
-			cells.at([row, col]).splitAbove = Split.Hyphen;
+			cell.splitAbove = Split.Hyphen;
 			continue;
 		}
 
@@ -55,8 +56,9 @@ function importPcn(pcnString: string): ImportedPuzzle {
 	for (let rowIdx = 0; rowIdx < dim; ++rowIdx) {
 		for (let colIdx = 0; colIdx < dim; ++colIdx) {
 			const cell = cells.at([rowIdx, colIdx]);
-			if (cell.acrossClue) {
-				cell.acrossClue.clue = decodeURIComponent(lines.shift() || "");
+			const clue = decodeURIComponent(lines.shift() || "");
+			if (cell !== null && cell.acrossClue) {
+				cell.acrossClue.clue = clue;
 			}
 		}
 	}
@@ -65,8 +67,9 @@ function importPcn(pcnString: string): ImportedPuzzle {
 	for (let rowIdx = 0; rowIdx < dim; ++rowIdx) {
 		for (let colIdx = 0; colIdx < dim; ++colIdx) {
 			const cell = cells.at([rowIdx, colIdx]);
-			if (cell.downClue) {
-				cell.downClue.clue = decodeURIComponent(lines.shift() || "");
+			const clue = decodeURIComponent(lines.shift() || "");
+			if (cell !== null && cell.downClue) {
+				cell.downClue.clue = clue;
 			}
 		}
 	}

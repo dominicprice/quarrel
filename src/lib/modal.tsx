@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useEffect } from "react";
+import { JSX, useEffect } from "react";
 
 interface ModalHeaderProps {
 	title: string;

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import anagramWord from "#/lib/dictionary/anagram";
 import CompletionList from "./completionlist";
@@ -43,8 +43,8 @@ const Anagrammer = ({ pattern }: AnagrammerProps) => {
 		}
 	}, [show]);
 
-	const ref = useRef(null);
-	useOnClickOutside([ref], () => setShow(false));
+	const ref = useRef<HTMLDivElement>(null);
+	useOnClickOutside([ref as RefObject<HTMLDivElement>], () => setShow(false));
 
 	const [value, className] = modeIndicator(mode);
 

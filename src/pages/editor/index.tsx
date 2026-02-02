@@ -160,10 +160,12 @@ const Editor = () => {
 	const onClueChanged = (pos: Position, dir: Dir, value: string) => {
 		updateCells((cells) => {
 			const cell = cells.at(pos);
-			if (dir === Dir.Across) {
-				if (cell.acrossClue !== null) cell.acrossClue.clue = value;
-			} else {
-				if (cell.downClue !== null) cell.downClue.clue = value;
+			if (cell !== null) {
+				if (dir === Dir.Across) {
+					if (cell.acrossClue !== null) cell.acrossClue.clue = value;
+				} else {
+					if (cell.downClue !== null) cell.downClue.clue = value;
+				}
 			}
 			return cells;
 		});
