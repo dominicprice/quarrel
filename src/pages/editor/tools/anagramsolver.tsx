@@ -27,6 +27,7 @@ const AnagramSolver = () => {
 			<div className="flex flex-col justify-center items-center gap-1">
 				<input
 					value={letters}
+					autoFocus
 					onChange={(e) => setLetters(e.target.value)}
 					type="text"
 					className={classNames(
